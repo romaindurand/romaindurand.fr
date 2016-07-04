@@ -1,0 +1,17 @@
+{
+  "name": "romaindurand",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-es6-polyfill": "^1.0.1",
+    "express": "^4.14.0",
+    "mustache": "^2.2.1"
+  }
+}
