@@ -1,16 +1,12 @@
-let App = {
+var App = {
 	pageList: ["blog", "musique", "dev", ""],
 	currentPage: "/",
-	start() {
-		if ('serviceWorker' in navigator) {
-			navigator.serviceWorker
-				.register('/service-worker.js')
-				.then(function() { console.log('Service Worker Registered'); });
-		}
+	start: function() {
+		this.initializeServiceWorker();
 		this.checkPage();
 	},
-	checkPage() {
-		let path = this.getPath();
+	checkPage: function() {
+		var path = this.getPath();
 		if (this.pageList.find(page => "/" + page === path) !== undefined) {
 			if (path === this.currentPage) {
 				return;
@@ -18,12 +14,12 @@ let App = {
 			this.loadPage(path);
 		}
 	},
-	loadPage() {
+	loadPage: function() {
 		this.currentPage = this.getPath();
 		fetch("page" + this.currentPage)
 			.then(response => response.text())
 			.then(textValue => {
-				let content = document.getElementById("content");
+				var content = document.getElementById("content");
 				var div = document.createElement("div");
 				div.innerHTML = textValue;
 				content.innerHTML = "";
@@ -31,7 +27,14 @@ let App = {
 				console.log("Page loaded : ", this.currentPage);
 			});
 	},
-	getPath() {
+	getPath: function() {
 		return window.location.pathname;
+	},
+	initializeServiceWorker: function() {
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker
+				.register('/service-worker.js')
+				.then(function() { console.info('Service worker registered'); });
+		}
 	}
 };
