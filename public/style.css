@@ -1,3 +1,35 @@
 body {
     font-family: 'Open Sans', sans-serif;
+    margin: 0;
+}
+
+#content {
+    margin-left: 10px;    
+}
+
+#menu li {
+    list-style-type: none;
+    display: inline;
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+#menu {
+    box-shadow: 0 0 10px black;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 10px;
+    background-color: #3F51B5;
+    height:  32px;
+}
+
+#menu a {
+    color: white;
+    text-decoration: none;
+    padding: 8px;
+}
+
+#menu a:hover, #menu a.active {
+    background-color: #2196F3;
+    text-shadow: 2px 0 2px #3F51B5;
 }

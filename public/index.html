@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,400italic,800italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="style.css">
+	<title>Romaind Durand</title>
 </head>
+
 <body>
-	 <div id="content">{{content}}</div>
-	 <script src="script.js"></script>
-     <script>var app = new App(); app.start();</script>
+	<ul id="menu">
+		<li><a href="/">Accueil</a></li>
+		<li><a href="/dev">/dev</a></li>
+		<li><a href="/musique">Musique</a></li>
+		<li><a href="/blog">Blog</a></li>
+		<li><a href="/gallerie">Gallerie</a></li>
+	</ul>
+	<div id="content">{{content}}</div>
+	<script src="script.js"></script>
+	<script>var app = new App(); app.start();</script>
 </body>
+
 </html>
