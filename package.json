@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babel-es6-polyfill": "^1.0.1",
-    "express": "^4.14.0",
-    "mustache": "^2.2.1"
+    "express": "^4.14.0"
   }
 }

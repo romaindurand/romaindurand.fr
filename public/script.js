@@ -1,23 +1,28 @@
+/*globals $*/
 function App() {
-	this.pageList = ["/blog", "/musique", "/dev", "/"];
+	this.pageList = ["/blog", "/musique", "/dev", "/", "/gallerie"];
 	this.currentPage = "/";
 }
 
 App.prototype.start = function () {
 	this.initializeServiceWorker();
-	this.currentPage = this.getPath();
 	this.manageNavigation();
-	this.checkPage();
+	this.initPage();
+	window.history.replaceState({ url: this.getPath() }, "");
 };
-App.prototype.checkPage = function () {
+
+App.prototype.initPage = function () {
 	var path = this.getPath();
+	var title = "Romain Durand - ";
 	if (this.isValidPath(path)) {
-		if (path === this.currentPage) {
-			return;
-		}
-		this.loadPage(path);
+		var activeMenuItem = $("#menu a[href='" + path + "']");
+		$("#menu a").removeClass("active");
+		activeMenuItem.addClass("active");
+		title += activeMenuItem.html();
+		$("title").html(title);
 	}
 };
+
 App.prototype.isValidPath = function (path) {
 	return this.pageList.find(function (page) {
 		return page === path;
@@ -25,9 +30,7 @@ App.prototype.isValidPath = function (path) {
 };
 
 App.prototype.loadPage = function (path) {
-	this.currentPage = path;
-	
-	fetch("page" + this.currentPage).then(function (response) {
+	fetch("page" + path).then(function (response) {
 		return response.text();
 	}).then(function (textValue) {
 		var content = document.getElementById("content");
@@ -35,7 +38,7 @@ App.prototype.loadPage = function (path) {
 		div.innerHTML = textValue;
 		content.innerHTML = "";
 		content.appendChild(div.childNodes[0]);
-		window.history.pushState({url: this.getPath()}, "", this.currentPage);
+		this.initPage();
 	}.bind(this));
 };
 
@@ -44,22 +47,31 @@ App.prototype.getPath = function () {
 };
 
 App.prototype.initializeServiceWorker = function () {
-	if ("serviceWorker" in navigator) {
-		navigator.serviceWorker
-			.register("/service-worker.js")
-			.then(function () {
-				console.info("Service worker registered");
-			});
+	if (!("serviceWorker" in navigator)) {
+		return;
 	}
+	navigator.serviceWorker
+		.register("/service-worker.js")
+		.then(function () {
+			console.info("Service worker registered");
+		});
 };
 
 App.prototype.manageNavigation = function () {
-	document.addEventListener("click", function() {
-		if (event.target.nodeName === "A") {
-			event.preventDefault();
-			this.loadPage(new URL(event.target.href).pathname);
+	document.addEventListener("click", function (event) {
+		if (event.ctrlKey || event.button === 1 || event.target.nodeName !== "A") {
+			return;
 		}
+		event.preventDefault();
+		var path = new URL(event.target.href).pathname;
+
+		window.history.pushState({ url: path }, "", path);
+		this.loadPage(path);
 	}.bind(this), false);
+
+	window.onpopstate = function (event) {
+		this.loadPage(event.state.url);
+	}.bind(this);
 };
 
 if (typeof module !== "undefined") module.exports = App;
