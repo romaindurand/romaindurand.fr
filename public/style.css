@@ -3,33 +3,64 @@ body {
     margin: 0;
 }
 
-#content {
-    margin-left: 10px;    
-}
-
-#menu li {
-    list-style-type: none;
-    display: inline;
-    margin-left: 10px;
-    font-size: 20px;
-}
-
 #menu {
-    box-shadow: 0 0 10px black;
+    position: fixed;
+    top: 0;
+    list-style: none;
     padding: 0;
     margin: 0;
-    margin-bottom: 10px;
-    background-color: #3F51B5;
-    height:  32px;
+    background-color: #000000;
+    text-align-last: center;
+    font-size: 0;
+    font-family: monospace;
+    box-shadow: 0 2px 5px black;
+    /* z-index: 68; */
+    width: 100%;
 }
 
 #menu a {
+    font-size: 20px;
     color: white;
     text-decoration: none;
-    padding: 8px;
+    height: 100%;
+    width: 100%;
+    display: block;
+}
+#menu li {
+    display: inline-block;
+    height: 40px;
+    /* border: 1px solid black; */
+    padding-top: 10px;
+    width: 110px;
+}
+#menu li:hover, #menu li.active {
+    background-color: #2196F3;
+    text-shadow: 2px 2px 0 #3F51B5;
+    /* border-left: 1px solid black; */
 }
 
-#menu a:hover, #menu a.active {
-    background-color: #2196F3;
-    text-shadow: 2px 0 2px #3F51B5;
+#content {
+    /* margin-left: 10px; */
+    /* margin-top: 100px; */
+}
+
+#header {
+    margin-top: 50px;
+    background-color: #3A3A3A;
+    min-height: 100px;
+}
+
+#header h1 {
+    margin-left: 10px;
+    margin-bottom: 0;
+    font-size: 40px;
+    text-shadow: -1px 1px 1px red, -1px -1px 1px blue, 1px 0 1px lime;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+#header span {
+    color: #CACACA;
+    text-shadow: 2px 2px 0 black;
+    margin-left: 10px;
 }

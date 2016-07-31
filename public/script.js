@@ -16,8 +16,8 @@ App.prototype.initPage = function () {
 	var title = "Romain Durand - ";
 	if (this.isValidPath(path)) {
 		var activeMenuItem = $("#menu a[href='" + path + "']");
-		$("#menu a").removeClass("active");
-		activeMenuItem.addClass("active");
+		$("#menu li").removeClass("active");
+		activeMenuItem.parent().addClass("active");
 		title += activeMenuItem.html();
 		$("title").html(title);
 	}
