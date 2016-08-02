@@ -1,4 +1,4 @@
-/*globals $*/
+/*globals $ Mustache*/
 function App() {
 	this.pageList = ["/blog", "/musique", "/dev", "/", "/gallerie"];
 	this.currentPage = "/";
@@ -37,7 +37,7 @@ App.prototype.loadPage = function (path) {
 		var div = document.createElement("div");
 		div.innerHTML = textValue;
 		content.innerHTML = "";
-		content.appendChild(div.childNodes[0]);
+		content.appendChild(div);
 		this.initPage();
 	}.bind(this));
 };
