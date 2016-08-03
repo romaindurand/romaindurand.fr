@@ -1,4 +1,4 @@
 <div class="post">
     <h2>{{title}}</h2>
-    <span>{[{content}}}</span>
+    <span>{{{content}}}</span>
 </div>
