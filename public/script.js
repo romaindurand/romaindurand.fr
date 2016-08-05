@@ -1,31 +1,58 @@
-/*globals $ Mustache*/
+/*globals $*/
 function App() {
-	this.pageList = ["/blog", "/musique", "/dev", "/", "/gallerie"];
+	this.pageList = [
+		{
+			path: "/",
+			menuLabel: "Accueil",
+			title: ""
+		},
+		{
+			path: "/dev",
+			menuLabel: "/dev"
+		},
+		{
+			path: "/musique",
+			menuLabel: "Musique"
+		},
+		{
+			path: "/blog",
+			menuLabel: "Blog"
+		},
+		{
+			path: "/gallerie",
+			menuLabel: "Gallerie"
+		}
+	];
 	this.currentPage = "/";
 }
 
 App.prototype.start = function () {
 	this.initializeServiceWorker();
 	this.manageNavigation();
-	this.initPage();
 	window.history.replaceState({ url: this.getPath() }, "");
 };
 
-App.prototype.initPage = function () {
+App.prototype.updatePageTitle = function () {
 	var path = this.getPath();
-	var title = "Romain Durand - ";
 	if (this.isValidPath(path)) {
 		var activeMenuItem = $("#menu a[href='" + path + "']");
 		$("#menu li").removeClass("active");
 		activeMenuItem.parent().addClass("active");
-		title += activeMenuItem.html();
-		$("title").html(title);
+		$("title").html(this.getTitle(path));
 	}
+};
+
+App.prototype.getTitle = function (path) {
+	var page = this.pageList.find(function (page) {
+		return page.path === path;
+	});
+	var pageTitle = page.title || page.menuLabel;
+	return "Romain Durand" + (pageTitle ? " - " + pageTitle : "");
 };
 
 App.prototype.isValidPath = function (path) {
 	return this.pageList.find(function (page) {
-		return page === path;
+		return page.path === path;
 	});
 };
 
@@ -33,12 +60,12 @@ App.prototype.loadPage = function (path) {
 	fetch("page" + path).then(function (response) {
 		return response.text();
 	}).then(function (textValue) {
-		var content = document.getElementById("content");
-		var div = document.createElement("div");
-		div.innerHTML = textValue;
-		content.innerHTML = "";
-		content.appendChild(div);
-		this.initPage();
+		var content = $("#content");
+		// var div = document.createElement("div");
+		// div.innerHTML = textValue;
+		// content.innerHTML = "";
+		content.html(textValue);
+		this.updatePageTitle();
 	}.bind(this));
 };
 

@@ -6,8 +6,8 @@ var db = require("./lib/db");
 var loadTemplates = require("./lib/templates");
 
 db.init();
-routes(app);
 loadTemplates(app);
+routes(app);
 
 app.listen(3000, function () {
 	console.log(logSymbols.success, "Server listening on port 3000. http://localhost:3000");
