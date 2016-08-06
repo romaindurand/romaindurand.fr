@@ -3,23 +3,29 @@ body {
     margin: 0;
 }
 
-#menu {
+#menuContainer {
+    width: 100%;
     position: fixed;
     top: 0;
+    background-color: black;
+    box-shadow: 0 2px 5px black;
+}
+
+#menu {
+    display: table;
+    table-layout: fixed;
     list-style: none;
     padding: 0;
     margin: 0;
     background-color: #000000;
-    text-align-last: center;
     font-size: 0;
     font-family: monospace;
-    box-shadow: 0 2px 5px black;
-    /* z-index: 68; */
     width: 100%;
 }
 
 #menu a {
-    font-size: 20px;
+    text-align: center;
+    font-size: 14px;
     color: white;
     text-decoration: none;
     height: 100%;
@@ -27,33 +33,25 @@ body {
     display: block;
 }
 #menu li {
-    display: inline-block;
-    height: 40px;
-    /* border: 1px solid black; */
+    display: table-cell;
+    height: 30px;
     padding-top: 10px;
-    width: 110px;
 }
 #menu li:hover, #menu li.active {
     background-color: #2196F3;
     text-shadow: 2px 2px 0 #3F51B5;
-    /* border-left: 1px solid black; */
-}
-
-#content {
-    /* margin-left: 10px; */
-    /* margin-top: 100px; */
 }
 
 #header {
-    margin-top: 50px;
+    margin-top: 40px;
     background-color: #3A3A3A;
-    min-height: 100px;
+    min-height: 66px;
 }
 
 #header h1 {
     margin-left: 10px;
     margin-bottom: 0;
-    font-size: 40px;
+    font-size: 25px;
     text-shadow: -1px 1px 1px red, -1px -1px 1px blue, 1px 0 1px lime;
     font-weight: bold;
     color: #FFFFFF;
@@ -63,6 +61,7 @@ body {
     color: #CACACA;
     text-shadow: 2px 2px 0 black;
     margin-left: 10px;
+    font-size: 12px;
 }
 
 .post {
@@ -79,4 +78,25 @@ body {
 
 .post h2 {
     font-size: 16px;
+}
+
+@media (min-width: 600px) {
+    #menu {
+        width: 600px;margin: auto;
+    }
+    #menu a {
+        font-size: 20px;
+    }
+    #menu li {
+        height: 40px;
+    }
+    #header {
+        margin-top: 50px;
+    }
+    #header h1 {
+        font-size: 40px;
+    }
+    #header span {
+        font-size: 16px;
+    }
 }
