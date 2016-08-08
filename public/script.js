@@ -23,7 +23,9 @@ function App() {
 			menuLabel: "Gallerie"
 		}
 	];
-	this.currentPage = "/";
+	this.taglines = [
+		"Obviously not a web design blog"
+	];
 }
 
 App.prototype.start = function () {
@@ -48,6 +50,11 @@ App.prototype.getTitle = function (path) {
 	});
 	var pageTitle = page.title || page.menuLabel;
 	return "Romain Durand" + (pageTitle ? " - " + pageTitle : "");
+};
+
+App.prototype.getTagline = function () {
+	var index = ~~ (Math.random() * this.taglines.length);
+	return this.taglines[index];
 };
 
 App.prototype.isValidPath = function (path) {
@@ -86,11 +93,13 @@ App.prototype.initializeServiceWorker = function () {
 
 App.prototype.manageNavigation = function () {
 	document.addEventListener("click", function (event) {
-		if (event.ctrlKey || event.button === 1 || event.target.nodeName !== "A") {
+		if (event.ctrlKey || event.button === 1 || !$(event.target).is("a")) {
 			return;
 		}
 		event.preventDefault();
-		var path = new URL(event.target.href).pathname;
+		var a = document.createElement("a");
+		a.href = event.target.href;
+		var path = a.pathname;
 
 		window.history.pushState({ url: path }, "", path);
 		this.loadPage(path);

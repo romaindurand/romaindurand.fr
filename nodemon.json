@@ -1,0 +1,9 @@
+{
+  "watch": [
+    ".",
+    "lib/",
+    "public/",
+    "templates/"
+  ],
+  "ext": "js json hbs"
+}

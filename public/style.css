@@ -70,7 +70,6 @@ body {
     min-height: 200px;
     background-color: white;
     box-shadow: 0 0 5px black;
-    background-color: white;
     margin: auto;
     padding: 10px;
     margin-top: 10px;
@@ -80,9 +79,18 @@ body {
     font-size: 16px;
 }
 
+.video-container {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    padding-bottom: 70%;
+    padding-bottom: calc(56.25% + 133px);
+}
+
 @media (min-width: 600px) {
     #menu {
-        width: 600px;margin: auto;
+        width: 620px;
+        margin: auto;
     }
     #menu a {
         font-size: 20px;
