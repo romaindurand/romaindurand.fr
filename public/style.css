@@ -1,14 +1,16 @@
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: monospace;
     margin: 0;
+    background-color: hsla(207,100%,4%,1);
 }
-
 #menuContainer {
     width: 100%;
     position: fixed;
     top: 0;
     background-color: black;
+    background: linear-gradient(0deg, black 43%, hsla(207,90%,35%,1) 100%);
     box-shadow: 0 2px 5px black;
+    z-index: 1;
 }
 
 #menu {
@@ -17,7 +19,6 @@ body {
     list-style: none;
     padding: 0;
     margin: 0;
-    background-color: #000000;
     font-size: 0;
     font-family: monospace;
     width: 100%;
@@ -28,31 +29,34 @@ body {
     font-size: 14px;
     color: white;
     text-decoration: none;
-    height: 100%;
+    height: 37px;
     width: 100%;
     display: block;
+    padding-top: 13px;
+    transition: font-size 400ms ease-in-out;
 }
 #menu li {
     display: table-cell;
-    height: 30px;
-    padding-top: 10px;
+    height: 50px;
+    text-shadow: 0px -2px 3px black;
 }
 #menu li:hover, #menu li.active {
     background-color: #2196F3;
-    text-shadow: 2px 2px 0 #3F51B5;
+    background: linear-gradient(0deg, black 22%, #0961aa 100%);
+    text-shadow: 0px -2px 1px black;
 }
 
 #header {
-    margin-top: 40px;
-    background-color: #3A3A3A;
-    min-height: 66px;
+    margin-top: 50px;
+    background-color: black;
+    min-height: 100px;
 }
 
 #header h1 {
     margin-left: 10px;
     margin-bottom: 0;
     font-size: 25px;
-    text-shadow: -1px 1px 1px red, -1px -1px 1px blue, 1px 0 1px lime;
+    text-shadow: -2px 2px 1px red, -2px -2px 1px blue, 2px 0 1px lime;
     font-weight: bold;
     color: #FFFFFF;
 }
@@ -64,19 +68,67 @@ body {
     font-size: 12px;
 }
 
-.post {
-    width: 90%;
-    max-width: 600px;
-    min-height: 200px;
-    background-color: white;
-    box-shadow: 0 0 5px black;
-    margin: auto;
+#header ul {
+    padding: 0;
+    text-align: left;
+    position: relative;
+    bottom: 37px;
+    right: 10px;
+    float: right;
+    margin: 0;
+}
+
+#header li {
+    list-style: none;
+}
+
+#header a {
+    color: white;
+}
+
+.filters {
+    color: black;
+    font-size: 0;
+    text-align: center;
+}
+
+.filters a {
+    color: white;
+    display: inline-block;
+    padding: 8px;
+    text-decoration: none;
+    font-size: 12px;
+    border-radius: 2px;
+    margin: 9px 5px 0px 5px;
+    background-color: #2196F3;
+    text-shadow: 0px -2px 1px black;
+    background: linear-gradient(0deg, black -10%, hsla(207,90%,13%,1) 100%);
+}
+
+.filters a.active {
+    background: linear-gradient(0deg, black -10%, hsla(207,90%,35%,1) 100%);
+}
+.post-content {
     padding: 10px;
+}
+
+.post {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    box-shadow: 0 0 9px hsla(207,100%,50%,1);
+    margin: auto;
     margin-top: 10px;
 }
 
 .post h2 {
     font-size: 16px;
+    margin-top: 0;
+}
+
+.post img {
+    width: 100%;
+    display: block;
 }
 
 .video-container {
@@ -87,20 +139,35 @@ body {
     padding-bottom: calc(56.25% + 133px);
 }
 
-@media (min-width: 600px) {
+@media (min-width: 620px) {
     #menu {
         width: 620px;
         margin: auto;
     }
     #menu a {
         font-size: 20px;
+        transition: font-size 400ms ease-in-out;
     }
     #menu li {
-        height: 40px;
+        border-left: 1px solid black;
     }
+
+    #menu li:first-child {
+        /* padding-top: 10px; */
+        /* border-left: none; */
+    }
+
+    #menu li:last-child {
+    /* padding-top: 10px; */
+    border-right: 1px solid black;
+}
+
+#menu a {
+    /*padding-top: 10px;*/
+}
     #header {
         margin-top: 50px;
-        min-height: 100px;
+        min-height: 126px;
     }
     #header h1 {
         font-size: 40px;
