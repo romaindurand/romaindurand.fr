@@ -1,30 +1,32 @@
-/* globals $,_ */
+/* globals $,_,fetch */
 function App () {
   this.pageList = [
     {
       path: '/',
       menuLabel: 'Accueil',
-      title: ''
+      title: '',
+      classSuffix: 'avatar'
     },
     {
       path: '/dev',
-      menuLabel: '/dev'
+      menuLabel: '/dev',
+      classSuffix: 'next-1'
     },
     {
       path: '/musique',
-      menuLabel: 'Musique'
+      menuLabel: 'Musique',
+      classSuffix: 'speaker'
     },
     {
       path: '/blog',
-      menuLabel: 'Blog'
+      menuLabel: 'Blog',
+      classSuffix: 'edit'
     },
     {
       path: '/gallerie',
-      menuLabel: 'Gallerie'
+      menuLabel: 'Gallerie',
+      classSuffix: 'photo-camera'
     }
-  ]
-  this.taglines = [
-    'Obviously not a web design blog'
   ]
 }
 
@@ -90,11 +92,6 @@ App.prototype.getTitle = function (path) {
   return 'Romain Durand' + (pageTitle ? ' - ' + pageTitle : '')
 }
 
-App.prototype.getTagline = function () {
-  var index = ~~(Math.random() * this.taglines.length)
-  return this.taglines[index]
-}
-
 App.prototype.isValidPath = function (path) {
   return !!this.pageList.find(function (page) {
     return path.startsWith(page.path)
@@ -147,6 +144,11 @@ App.prototype.manageNavigation = function () {
       url: path
     }, '', path)
     _this.loadPage(path, 0)
+  })
+
+  $('#menu-button').click(function () {
+    $(this).toggleClass('open')
+    $('#header').toggleClass('open')
   })
 
   window.onpopstate = function (event) {

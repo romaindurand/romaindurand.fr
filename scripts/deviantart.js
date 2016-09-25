@@ -6,6 +6,7 @@ var inquirer = require('inquirer')
 var dAmn = require('damn')
 var uid = require('uid')
 var queue = require('queue')
+var path = require('path')
 var q = queue()
 q.concurrency = 1
 q.timeout = 5000
@@ -16,7 +17,7 @@ q.on('timeout', function (next, job) {
 
 var posts = []
 
-fs.readFile(__dirname + '\\config.json', 'utf-8', function (err, data) {
+fs.readFile(path.join(__dirname, '\\config.json'), 'utf-8', function (err, data) {
   if (err) {
     inputConfig()
     return

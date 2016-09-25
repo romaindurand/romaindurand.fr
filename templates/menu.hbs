@@ -1,7 +1,12 @@
-<div id="menuContainer">
+<nav id="menuContainer">
+    <div id="menu-button">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
     <ul id="menu">
         {{#menuItems}}
-        <li{{#active}} class="active"{{/active}}><a href="{{{path}}}">{{menuLabel}}</a></li>
+        <li{{#active}} class="active"{{/active}}><a href="{{{path}}}">{{menuLabel}}<i class="flaticon-{{classSuffix}}"></i></a></li>
         {{/menuItems}}
     </ul>
-</div>
+</nav>
