@@ -1,14 +1,16 @@
 body {
-  background: #29272C;
+  background: #252328;
   color: white;
   font-family: Courier New, Courier, monospace;
   margin: 0;
-  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
 }
 #content {
   position: relative;
   /* width: 100%; */
   margin-left: 60px;
+  padding-top: 70px;
+  background: #29272C;
 }
 #header {
   background: #252328;
@@ -25,6 +27,7 @@ body {
 
 #header.open {
   width: 200px;
+  box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.7);
 }
 
 #menuContainer {
@@ -36,7 +39,7 @@ body {
   padding: 0;
 }
 
-#menu li a:hover, #menu .active a {
+#menu li a:hover, #menu .active a, .filters a:hover {
   background-color: #4e4eea;
   transition: 0.25s ease-in-out;
 }
@@ -97,6 +100,9 @@ body {
   left: -151px;
   transition: 0.25s ease-in-out;
 }
+#header .title i {
+  color: #4e4eea;
+}
 
 
 
@@ -142,17 +148,74 @@ body {
 */
 
 .post {
-  padding: 3px 10px;
+  padding: 5px 0px;
+  /* margin: 0 0; */
+}
+
+.post-content {
+  width: 100%;
+  margin: auto;
+  max-width: 700px;
+}
+
+.post h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #4e4eea;
+    background: #252328;
+    padding: 5px 5px 5px 15px;
+    margin: 0px 0px 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    display: block;
+    border-top: 1px solid #353338;
 }
 
 .post-content img {
   width: 100%;
+  /* max-width: 700px; */
+  /* margin: auto; */
 }
+
+.post-date {
+  margin-left: 10px;
+}
+
+.post-content a {}
 
 .filters {
-  padding: 10px;
+  /* padding: 10px; */
+  background: #252328;
+  height: 60px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 500;
+  transition: all .25s ease-out 0s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+  width: 100%;
+  overflow: hidden;
+  display: table;
 }
 
+.filters a {
+  text-decoration: none;
+  color: white;
+  background: #252328;
+  padding: 5px;
+  margin: 5px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  border-right: 1px solid #424242;
+  border-left: 1px solid #0e0e0e;
+  font-size: 16px;
+  transition: 0.25s ease-in-out;
+}
+
+.filters a.active {
+  background: #4e4eea;
+  text-shadow: 0 2px 2px black;
+}
 /* Toggle Menu Button inspired by https://codepen.io/designcouch/pen/Atyop */
 
 #menu-button {
@@ -202,7 +265,9 @@ body {
 }
 
 .post {
-  border-bottom: 1px solid #353338;
+  /* border-bottom: 1px solid #353338; */
+  background: #29272C;
+  z-index: 1;
 }
 
 .video-container {
@@ -229,5 +294,9 @@ body {
     bottom: 92px;
     left: -62px;
     transition: 0.25s ease-in-out;
+  }
+
+  .filters a {
+    font-size: 12px;
   }
 }
