@@ -147,8 +147,8 @@ App.prototype.manageNavigation = function () {
   })
 
   $('#menu-button').click(function () {
-    $(this).toggleClass('open')
     $('#header').toggleClass('open')
+    $('body').toggleClass('overlay')
   })
 
   window.onpopstate = function (event) {
