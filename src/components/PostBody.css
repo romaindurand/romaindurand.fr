@@ -1,0 +1,33 @@
+.PostBody pre {
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 3px;
+  line-height: 1.45;
+  padding: 1rem;
+  word-wrap: normal;
+}
+
+.hljs {
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.hljs-keyword {
+  color: #d73a49;
+}
+
+.hljs-string {
+  color: #009603;
+}
+
+.hljs-title.function_ {
+  color: #6f42c1;
+}
+
+.hljs-variable.language_,
+.hljs-params,
+.hljs-attr,
+.hljs-built_in {
+  color: #005cc5;
+}

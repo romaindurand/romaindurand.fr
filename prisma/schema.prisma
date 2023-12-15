@@ -19,3 +19,11 @@ model Post {
   published Boolean  @default(false)
   slug      String?  @unique
 }
+
+model LoginAttempt {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @default(now())
+  success   Boolean
+  ip        String
+  userAgent String
+}
