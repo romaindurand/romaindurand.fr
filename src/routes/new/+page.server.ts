@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export const load: PageServerLoad = async (event) => {
 	if (!event.locals.authenticated) {
-		throw error(401, 'not logged in');
+		error(401, 'not logged in');
 	}
 };
 
@@ -18,7 +18,7 @@ export const actions: Actions = {
 		const title = data.get('title')?.toString();
 
 		if (!title) {
-			throw error(400, 'title is required');
+			return error(400, 'title is required');
 		}
 
 		await prisma.post.create({

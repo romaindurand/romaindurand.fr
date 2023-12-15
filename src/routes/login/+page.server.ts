@@ -8,7 +8,7 @@ export const actions: Actions = {
 		const data = await event.request.formData();
 		const key = data.get('key') as string;
 		if (key !== process.env.LOGIN_KEY) {
-			throw error(401, 'login failed');
+			error(401, 'login failed');
 		}
 		const id = uuid();
 		event.cookies.set('session', id, {
