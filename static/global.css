@@ -1,0 +1,14 @@
+body {
+	margin: 0;
+	font-family: 'sudo', Verdana, Geneva, Tahoma, sans-serif;
+}
+
+@font-face {
+	font-family: 'sudo';
+	font-style: normal;
+	font-weight: 400;
+	src:
+		local('SudoVariable'),
+		local('Sudo'),
+		url(/SudoVariable.woff2) format('woff2');
+}

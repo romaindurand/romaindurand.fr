@@ -1,5 +1,5 @@
-import { error } from '@sveltejs/kit';
-import { sessionDuration, sessions } from '../../stores/sessions';
+import { error, redirect } from '@sveltejs/kit';
+import { sessionDuration, sessions } from '../../../../stores/sessions';
 import type { Actions } from './$types';
 import { v4 as uuid } from 'uuid';
 
@@ -18,5 +18,7 @@ export const actions: Actions = {
 		setTimeout(() => {
 			sessions.update((sessions) => sessions.filter((s) => s !== id));
 		}, sessionDuration);
+
+		redirect(302, '/admin');
 	}
 };
