@@ -13,7 +13,7 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"postinstall": "prisma generate"
+		"postinstall": "prisma generate && prisma db push"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
