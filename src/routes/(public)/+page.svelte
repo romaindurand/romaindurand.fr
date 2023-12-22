@@ -55,7 +55,7 @@
 		text-decoration: none;
 		color: inherit;
 		border: 4px solid white;
-		transition: all 0.2s ease;
+		transition: all 0.3s ease;
 	}
 	.post a:hover {
 		border: 4px solid black;
@@ -65,6 +65,8 @@
 	}
 
 	.post .title {
+		text-decoration: underline transparent;
+		transition: text-decoration 0.3s ease;
 		font-size: 1.5rem;
 		font-weight: bold;
 	}

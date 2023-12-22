@@ -21,13 +21,10 @@
 </div>
 
 <style>
-	/* .Layout {
-		padding: 1rem;
-	} */
-
 	nav {
 		display: flex;
 		border: 4px solid black;
+		border-right: none;
 		justify-content: space-between;
 	}
 
@@ -36,7 +33,6 @@
 		background-color: black;
 		margin: 0;
 		padding: 0.5rem;
-		/* border: 4px solid black; */
 		border-bottom: none;
 		font-size: 1.1rem;
 		font-weight: normal;
@@ -57,12 +53,33 @@
 		padding: 1rem;
 		text-decoration: none;
 		color: black;
-		transition: all 0.2s ease;
+		transition: all 0.3s ease;
 	}
 
 	nav a:hover,
 	nav a.active {
 		background-color: black;
 		color: white;
+	}
+
+	@media (max-width: 500px) {
+		nav {
+			border: none;
+		}
+		nav ul {
+			margin: 0;
+			width: 100%;
+			flex-direction: column;
+			border-bottom: none;
+		}
+		nav li a {
+			font-size: 1.5rem;
+			padding: 0.5rem;
+			display: block;
+			border-right: none;
+			border-bottom: 4px solid black;
+			width: 100%;
+			text-align: center;
+		}
 	}
 </style>

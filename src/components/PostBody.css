@@ -20,6 +20,7 @@
 	line-height: 1.2;
 	padding: 1rem;
 	word-wrap: normal;
+	overflow: auto;
 }
 
 .PostBody pre code {
