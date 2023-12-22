@@ -8,6 +8,6 @@ _Personal website_
 
 ## Run locally
 
+- `cp .env.example .env`
 - `pnpm i`
-- copy/rename `.env.example` to `.env`
-- `pnpm run dev`
+- `pnpm dev`
