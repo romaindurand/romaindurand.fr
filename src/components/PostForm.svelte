@@ -1,8 +1,14 @@
 <script lang="ts">
+	import { onDestroy, onMount } from 'svelte';
+	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 	import type { Post } from '@prisma/client';
 	import PostBody from './PostBody.svelte';
 
 	export let post: Post | null = null;
+
+	let editor: Monaco.editor.IStandaloneCodeEditor;
+	let monaco: typeof Monaco;
+	let editorContainer: HTMLElement;
 
 	let showPreview = false;
 	let content = post?.content || "```js\nconst test = 'toto';\n```";
@@ -16,6 +22,29 @@
 			textarea.style.height = textarea.scrollHeight + 2 + 'px';
 		}
 	}
+
+	onMount(async () => {
+		// Import our 'monaco.ts' file here
+		// (onMount() will only be executed in the browser, which is what we want)
+		monaco = (await import('$lib/monaco')).default;
+
+		// Your monaco instance is ready, let's display some code!
+		const editor = monaco.editor.create(editorContainer);
+		const model = monaco.editor.createModel(
+			"console.log('Hello from Monaco! (the editor, not the city...)')",
+			'markdown'
+		);
+		model.onDidChangeContent(() => {
+			content = model.getValue();
+		});
+		editor.setModel(model);
+		// editor.onchange
+	});
+
+	onDestroy(() => {
+		monaco?.editor.getModels().forEach((model) => model.dispose());
+		editor?.dispose();
+	});
 </script>
 
 <form method="post">
@@ -52,7 +81,14 @@
 	</div>
 </form>
 
+<div class="editor" bind:this={editorContainer} />
+
 <style>
+	.editor {
+		width: 100%;
+		height: 600px;
+	}
+
 	.container {
 		display: grid;
 		gap: 1rem;
