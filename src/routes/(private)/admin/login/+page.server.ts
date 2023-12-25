@@ -2,12 +2,13 @@ import { error, redirect } from '@sveltejs/kit';
 import { sessionDuration, sessions } from '../../../../stores/sessions';
 import type { Actions } from './$types';
 import { v4 as uuid } from 'uuid';
+import { env } from '$env/dynamic/private';
 
 export const actions: Actions = {
 	default: async (event) => {
 		const data = await event.request.formData();
 		const key = data.get('key') as string;
-		if (key !== process.env.LOGIN_KEY) {
+		if (key !== env.LOGIN_KEY) {
 			error(401, 'login failed');
 		}
 		const id = uuid();

@@ -27,6 +27,7 @@
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.30.0",
+		"monaco-editor": "^0.45.0",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"prisma": "^5.7.0",
@@ -42,6 +43,7 @@
 		"@prisma/client": "5.7.0",
 		"showdown": "^2.1.0",
 		"showdown-highlight": "^3.1.0",
+		"svelte-youtube-lite": "^0.4.1",
 		"uuid": "^9.0.1"
 	}
 }
