@@ -9,6 +9,9 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 	}
+	interface Document {
+		startViewTransition: (Function) => void;
+	}
 }
 
 export {};

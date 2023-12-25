@@ -1,5 +1,17 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { onNavigate } from '$app/navigation';
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 
 	const pages = ['', 'about', 'projects', 'contact'];
 </script>
@@ -9,7 +21,7 @@
 	<ul>
 		{#each pages as path}
 			<li>
-				<a href={`/${path}`} class:active={$page.url.pathname === `/${path}`}>
+				<a href={`/${path}`} class:active={$page.url.pathname.replace(/\//g, '') === path}>
 					{path || 'Blog'}
 				</a>
 			</li>
@@ -22,6 +34,7 @@
 
 <style>
 	nav {
+		view-transition-name: site-nav;
 		display: flex;
 		border: 4px solid black;
 		border-right: none;
@@ -29,6 +42,7 @@
 	}
 
 	h1 {
+		view-transition-name: site-title;
 		color: white;
 		background-color: black;
 		margin: 0;

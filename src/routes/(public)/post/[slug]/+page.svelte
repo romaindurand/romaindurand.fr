@@ -6,12 +6,15 @@
 </script>
 
 <div class="content">
-	<h1>{post.title}</h1>
-	<p class="chapo">{post.chapo}</p>
+	<h1 style={`view-transition-name: post-title-${post.id};`}>{post.title}</h1>
+	<p class="chapo" style={`view-transition-name: post-chapo-${post.id};`}>{post.chapo}</p>
 	<PostBody markdown={post.content} />
 </div>
 
 <style>
+	h1 {
+		display: inline;
+	}
 	.content {
 		padding: 1rem;
 	}

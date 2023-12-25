@@ -17,7 +17,6 @@
 		const storedFilters = localStorage.getItem('filters');
 		// TODO : if stored filters names doesn't match with filters names, reset stored filters
 
-		console.log({ storedFilters });
 		if (storedFilters) {
 			filters = JSON.parse(storedFilters);
 		}
@@ -38,8 +37,8 @@
 {#each posts as post}
 	<div class="post">
 		<a href="post/{getSlug(post)}">
-			<span class="title">{post.title}</span>
-			<p>{post.chapo}</p>
+			<span class="title" style={`view-transition-name: post-title-${post.id};`}>{post.title}</span>
+			<p style={`view-transition-name: post-chapo-${post.id};`}>{post.chapo}</p>
 		</a>
 	</div>
 {/each}
