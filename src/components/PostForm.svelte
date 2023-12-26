@@ -29,11 +29,18 @@
 		monaco = (await import('$lib/monaco')).default;
 
 		// Your monaco instance is ready, let's display some code!
-		const editor = monaco.editor.create(editorContainer);
-		const model = monaco.editor.createModel(
-			"console.log('Hello from Monaco! (the editor, not the city...)')",
-			'markdown'
-		);
+		const editor = monaco.editor.create(editorContainer, {
+			value: content,
+			language: 'markdown',
+			// theme: 'vs-dark',
+			wordWrap: 'on',
+			// automaticLayout: true,
+			scrollBeyondLastLine: false,
+			minimap: {
+				enabled: false
+			}
+		});
+		const model = monaco.editor.createModel(content, 'markdown');
 		model.onDidChangeContent(() => {
 			content = model.getValue();
 		});
@@ -75,18 +82,19 @@
 			<div class="preview" class:hidden={!showPreview}>
 				<PostBody markdown={content} />
 			</div>
-			<textarea name="content" bind:value={content} class:hidden={showPreview} use:adjustHeight />
+			<div class="editor" class:hidden={showPreview} bind:this={editorContainer} />
+			<textarea name="content" bind:value={content} class="hidden" use:adjustHeight />
 		</div>
 		<button type="submit">{post ? 'Update' : 'Create'}</button>
 	</div>
 </form>
 
-<div class="editor" bind:this={editorContainer} />
-
 <style>
 	.editor {
 		width: 100%;
 		height: 600px;
+		border: 1px solid #ccc;
+		border-radius: 0px;
 	}
 
 	.container {
@@ -135,7 +143,7 @@
 	textarea:focus-visible {
 		outline-offset: -2px;
 		box-sizing: border-box;
-		outline: 2px solid black;
+		outline: 2px solid var(--color-text);
 		border-radius: 0px;
 	}
 
@@ -145,8 +153,8 @@
 	}
 	button[type='submit'] {
 		padding: 1rem;
-		background: #000;
-		color: #fff;
+		background: var(--color-text);
+		color: var(--color-background);
 		border: none;
 		cursor: pointer;
 	}

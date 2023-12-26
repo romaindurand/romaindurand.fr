@@ -1,6 +1,18 @@
+:root {
+	--color-background: black;
+	--color-text: white;
+	--color-code-background: hsl(0 0% 5% / 1);
+	--color-grey: #7f7f7f;
+}
+
+[data-theme='light'] {
+	--color-background: white;
+	--color-text: black;
+	--color-code-background: hsl(0 0% 90% / 1);
+}
 body {
-	background-color: white;
-	color: black;
+	background-color: var(--color-background);
+	color: var(--color-text);
 	margin: 0;
 	font-family: 'sudo', Verdana, Geneva, Tahoma, sans-serif;
 }

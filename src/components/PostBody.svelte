@@ -21,6 +21,14 @@
 		return youtubeId;
 	}
 
+	function getYoutubeIdFromHtmlLine(line: string) {
+		return line.replace('<p>!yt:', '').replace('</p>', '');
+	}
+
+	function shouldReplaceByYoutubeComponent(line: string) {
+		return line.startsWith('<p>!yt:');
+	}
+
 	$: html = converter.makeHtml(markdown);
 	$: splitHtml = html.split('\n<p>!yt:').reduce((memo, line, index) => {
 		if (index === 0) {
@@ -36,8 +44,8 @@
 
 <div class="PostBody">
 	{#each splitHtml as line}
-		{#if line.includes('!yt:')}
-			<Youtube id={line.replace('<p>!yt:', '').replace('</p>', '')} />
+		{#if shouldReplaceByYoutubeComponent(line)}
+			<Youtube id={getYoutubeIdFromHtmlLine(line)} />
 		{:else}
 			{@html line}
 		{/if}

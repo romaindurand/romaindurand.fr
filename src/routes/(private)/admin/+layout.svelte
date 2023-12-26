@@ -1,3 +1,11 @@
+<script>
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		document.documentElement.setAttribute('data-theme', 'light');
+	});
+</script>
+
 <div class="Layout">
 	<slot />
 </div>

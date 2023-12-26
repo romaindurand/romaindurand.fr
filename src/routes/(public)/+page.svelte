@@ -53,11 +53,11 @@
 		display: block;
 		text-decoration: none;
 		color: inherit;
-		border: 4px solid white;
+		border: 4px solid var(--color-background);
 		transition: all 0.3s ease;
 	}
 	.post a:hover {
-		border: 4px solid black;
+		border: 4px solid var(--color-text);
 	}
 	.post a:hover .title {
 		text-decoration: underline;
