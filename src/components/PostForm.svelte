@@ -24,17 +24,12 @@
 	}
 
 	onMount(async () => {
-		// Import our 'monaco.ts' file here
-		// (onMount() will only be executed in the browser, which is what we want)
 		monaco = (await import('$lib/monaco')).default;
 
-		// Your monaco instance is ready, let's display some code!
 		const editor = monaco.editor.create(editorContainer, {
 			value: content,
 			language: 'markdown',
-			// theme: 'vs-dark',
 			wordWrap: 'on',
-			// automaticLayout: true,
 			scrollBeyondLastLine: false,
 			minimap: {
 				enabled: false
@@ -45,7 +40,6 @@
 			content = model.getValue();
 		});
 		editor.setModel(model);
-		// editor.onchange
 	});
 
 	onDestroy(() => {

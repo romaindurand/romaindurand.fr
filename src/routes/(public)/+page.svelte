@@ -15,7 +15,7 @@
 
 	onMount(() => {
 		const storedFilters = localStorage.getItem('filters');
-		// TODO : if stored filters names doesn't match with filters names, reset stored filters
+		// TODO: if stored filters names doesn't match with filters names, reset stored filters
 
 		if (storedFilters) {
 			filters = JSON.parse(storedFilters);

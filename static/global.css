@@ -15,6 +15,7 @@ body {
 	color: var(--color-text);
 	margin: 0;
 	font-family: 'sudo', Verdana, Geneva, Tahoma, sans-serif;
+	transition: all 0.2s ease;
 }
 
 @font-face {
@@ -50,11 +51,6 @@ body {
 		transform: translateX(-30px);
 	}
 }
-
-/* :root::view-transition-old(root),
-:root::view-transition-new(root) {
-	animation-duration: 1s;
-} */
 
 :root::view-transition-old(root) {
 	animation:

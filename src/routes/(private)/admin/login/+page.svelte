@@ -2,14 +2,11 @@
 	import { enhance } from '$app/forms';
 </script>
 
-<!-- <script lang="ts">
-	export let data;
-</script> -->
-
 <form
 	method="post"
 	use:enhance={({ formElement, formData, action, cancel, submitter }) => {
 		console.log('form submitted');
+		// TODO: handle form response client-side
 		// `formElement` is this `<form>` element
 		// `formData` is its `FormData` object that's about to be submitted
 		// `action` is the URL to which the form is posted
@@ -27,5 +24,3 @@
 	<input type="text" name="key" />
 	<button type="submit">Login</button>
 </form>
-
-<!-- <img src={data.imageUrl} alt="qrcode" /> -->
