@@ -15,9 +15,6 @@
 	h1 {
 		display: inline;
 	}
-	.content {
-		padding: 1rem;
-	}
 
 	.chapo {
 		font-size: 1.2rem;

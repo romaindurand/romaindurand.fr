@@ -53,11 +53,13 @@
 		display: block;
 		text-decoration: none;
 		color: inherit;
-		border: 4px solid var(--color-background);
+		border: 4px solid transparent;
 		transition: all 0.3s ease;
+		border-radius: 20px;
 	}
 	.post a:hover {
-		border: 4px solid var(--color-text);
+		border: 4px solid red;
+		border-radius: 0;
 	}
 	.post a:hover .title {
 		text-decoration: underline;

@@ -26,7 +26,7 @@
 		localStorage.setItem('theme', theme);
 	}
 
-	const pages = ['', 'about', 'projects', 'contact'];
+	const pages = ['', 'projects', 'contact', 'about'];
 </script>
 
 <h1>
@@ -36,8 +36,8 @@
 <nav>
 	<ul>
 		{#each pages as path}
-			<li>
-				<a href={`/${path}`} class:active={$page.url.pathname.replace(/\//g, '') === path}>
+			<li class:active={$page.url.pathname.replace(/\//g, '') === path}>
+				<a href={`/${path}`}>
 					{path || 'Blog'}
 				</a>
 			</li>
@@ -49,6 +49,23 @@
 </div>
 
 <style>
+	.Layout {
+		padding: 1rem;
+		max-width: 720px;
+		margin: 0 auto;
+		border-left-style: solid;
+		border-right-style: solid;
+		border-image: linear-gradient(to bottom, var(--color-text), transparent) 0 100%;
+		border-width: 4px;
+		min-height: 100vh;
+		/* view-transition-name: site-content; */
+	}
+
+	@media (max-width: 1000px) {
+		.Layout {
+			border-width: 0;
+		}
+	}
 	nav {
 		view-transition-name: site-nav;
 		display: flex;
@@ -91,24 +108,33 @@
 		display: flex;
 		list-style: none;
 		padding: 0;
+		margin: 0;
 	}
 
-	nav a {
-		text-transform: capitalize;
+	nav li {
+		text-transform: uppercase;
 		font-weight: bold;
 		font-size: 2rem;
 		border-right: 4px solid var(--color-text);
 		box-sizing: border-box;
+	}
+
+	nav a {
+		display: block;
 		padding: 1rem;
 		text-decoration: none;
 		color: var(--color-text);
 		transition: all 0.3s ease;
 	}
 
-	nav a:hover,
-	nav a.active {
+	nav li.active a {
+		color: red;
 		background-color: var(--color-text);
-		color: var(--color-background);
+	}
+
+	nav li:hover a,
+	nav li.active {
+		color: red;
 	}
 
 	@media (max-width: 500px) {
