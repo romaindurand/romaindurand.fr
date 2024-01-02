@@ -13,9 +13,6 @@ dependencies:
   showdown-highlight:
     specifier: ^3.1.0
     version: 3.1.0
-  svelte-youtube-lite:
-    specifier: ^0.4.1
-    version: 0.4.1
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
@@ -72,6 +69,9 @@ devDependencies:
   svelte-check:
     specifier: ^3.6.0
     version: 3.6.2(postcss@8.4.32)(svelte@4.2.8)
+  svelte-youtube-lite:
+    specifier: ^0.4.2
+    version: 0.4.2
   tslib:
     specifier: ^2.4.1
     version: 2.6.2
@@ -2487,9 +2487,9 @@ packages:
       typescript: 5.3.3
     dev: true
 
-  /svelte-youtube-lite@0.4.1:
-    resolution: {integrity: sha512-GoOJKnOMbw43+IPDdWDW9qefClQD1g3GAgmPT9HDhgoGsspKSmevFxCrQiLtwwNBVF8ykWK8LDrAJ61+IEPydQ==}
-    dev: false
+  /svelte-youtube-lite@0.4.2:
+    resolution: {integrity: sha512-gnW6Vk/uyTS8RAXGYtbZZWr9orktjTkEYVXFNQ8FNSPQD638LFFCvhmocNDwy6cigd1cLjV0MB1Ise8slxRnww==}
+    dev: true
 
   /svelte@4.2.8:
     resolution: {integrity: sha512-hU6dh1MPl8gh6klQZwK/n73GiAHiR95IkFsesLPbMeEZi36ydaXL/ZAb4g9sayT0MXzpxyZjR28yderJHxcmYA==}

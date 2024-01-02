@@ -26,7 +26,12 @@
 		localStorage.setItem('theme', theme);
 	}
 
-	const pages = ['', 'projects', 'contact', 'about'];
+	const pages = [
+		{ url: '', name: 'BLOG' },
+		{ url: 'projects', name: 'PROJETS' },
+		{ url: 'contact', name: 'CONTACT' },
+		{ url: 'about', name: 'À PROPOS' }
+	];
 </script>
 
 <h1>
@@ -35,10 +40,10 @@
 </h1>
 <nav>
 	<ul>
-		{#each pages as path}
+		{#each pages as { url: path, name }}
 			<li class:active={$page.url.pathname.replace(/\//g, '') === path}>
 				<a href={`/${path}`}>
-					{path || 'Blog'}
+					{name}
 				</a>
 			</li>
 		{/each}
@@ -112,7 +117,6 @@
 	}
 
 	nav li {
-		text-transform: uppercase;
 		font-weight: bold;
 		font-size: 2rem;
 		border-right: 4px solid var(--color-text);
