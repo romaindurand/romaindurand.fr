@@ -1,9 +1,19 @@
 <script lang="ts">
 	import './PostBody.css';
 
+	import showdown from 'showdown';
+	import showdownHighlight from 'showdown-highlight';
 	import { Youtube } from 'svelte-youtube-lite';
 
-	export let content: string = '';
+	export let markdown: string = '';
+
+	const converter = new showdown.Converter({
+		extensions: [
+			showdownHighlight({
+				auto_detection: true
+			})
+		]
+	});
 
 	function getYoutubeIdFromUrl(url: string) {
 		const youtubeUrl = new URL(url);
@@ -19,7 +29,8 @@
 		return line.startsWith('<p>!yt:');
 	}
 
-	$: splitHtml = content.split('\n<p>!yt:').reduce((memo, line, index) => {
+	$: html = converter.makeHtml(markdown);
+	$: splitHtml = html.split('\n<p>!yt:').reduce((memo, line, index) => {
 		if (index === 0) {
 			memo.push(line);
 			return memo;

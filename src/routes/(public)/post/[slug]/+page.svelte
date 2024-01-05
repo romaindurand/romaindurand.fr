@@ -8,7 +8,7 @@
 <div class="content">
 	<h1 style={`view-transition-name: post-title-${post.id};`}>{post.title}</h1>
 	<p class="chapo" style={`view-transition-name: post-chapo-${post.id};`}>{post.chapo}</p>
-	<PostBody markdown={post.content} />
+	<PostBody content={post.html} />
 </div>
 
 <style>

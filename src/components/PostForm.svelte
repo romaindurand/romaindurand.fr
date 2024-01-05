@@ -2,7 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 	import type { Post } from '@prisma/client';
-	import PostBody from './PostBody.svelte';
+	import PostPreview from './PostPreview.svelte';
 
 	export let post: Post | null = null;
 
@@ -74,7 +74,7 @@
 				</button>
 			</div>
 			<div class="preview" class:hidden={!showPreview}>
-				<PostBody markdown={content} />
+				<PostPreview markdown={content} />
 			</div>
 			<div class="editor" class:hidden={showPreview} bind:this={editorContainer} />
 			<textarea name="content" bind:value={content} class="hidden" use:adjustHeight />
