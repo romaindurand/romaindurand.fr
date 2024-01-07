@@ -3,6 +3,7 @@
 	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 	import type { Post } from '@prisma/client';
 	import PostPreview from './PostPreview.svelte';
+	import { addCodeBlock } from '$lib/monaco';
 
 	export let post: Post | null = null;
 
@@ -26,7 +27,7 @@
 	onMount(async () => {
 		monaco = (await import('$lib/monaco')).default;
 
-		const editor = monaco.editor.create(editorContainer, {
+		editor = monaco.editor.create(editorContainer, {
 			value: content,
 			language: 'markdown',
 			wordWrap: 'on',
@@ -76,7 +77,12 @@
 			<div class="preview" class:hidden={!showPreview}>
 				<PostPreview markdown={content} />
 			</div>
-			<div class="editor" class:hidden={showPreview} bind:this={editorContainer} />
+			<div class="editor-wrapper" class:hidden={showPreview}>
+				<div class="toolbar">
+					<button on:click|preventDefault={() => addCodeBlock(editor)}>Code block</button>
+				</div>
+				<div class="editor" bind:this={editorContainer} />
+			</div>
 			<textarea name="content" bind:value={content} class="hidden" use:adjustHeight />
 		</div>
 		<button type="submit">{post ? 'Update' : 'Create'}</button>
@@ -84,11 +90,22 @@
 </form>
 
 <style>
-	.editor {
+	.editor-wrapper {
 		width: 100%;
-		height: 600px;
 		border: 1px solid #ccc;
 		border-radius: 0px;
+	}
+
+	.toolbar {
+		display: flex;
+		gap: 1rem;
+		padding: 0.5rem;
+		border-bottom: 1px solid #ccc;
+	}
+
+	.editor {
+		width: 100%;
+		height: 550px;
 	}
 
 	.container {
