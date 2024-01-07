@@ -25,7 +25,7 @@
 	}
 
 	onMount(async () => {
-		monaco = (await import('$lib/monaco')).default;
+		monaco = (await import('$lib/monaco-front')).default;
 
 		editor = monaco.editor.create(editorContainer, {
 			value: content,
