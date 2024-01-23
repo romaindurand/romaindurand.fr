@@ -14,7 +14,6 @@
 
 	$: {
 		splitHtml = splitOnComponent(html, componentNames);
-		console.log({ splitHtml });
 		targetBlankLinks();
 	}
 </script>

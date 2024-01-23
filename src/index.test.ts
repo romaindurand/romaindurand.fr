@@ -16,7 +16,6 @@ describe('splitOnComponent', () => {
 			'<p>text2</p>\n' +
 			'<p>text3</p>\n';
 		const split = splitOnComponent(html, ['Youtube']);
-		console.log({ split });
 		expect(split).toEqual([
 			'<h1>title</h1><p>text1</p>',
 			'<Youtube id="HdkJTOTY-Js"/>',
