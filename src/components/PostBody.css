@@ -9,8 +9,16 @@
 		Apple Color Emoji,
 		Segoe UI Emoji;
 	font-size: 1.1rem;
-	line-height: 1.2;
+	line-height: 1.6;
 	margin-bottom: 2rem;
+}
+
+.PostBody a {
+	color: var(--color-link);
+}
+
+.PostBody a:hover {
+	color: red;
 }
 
 .PostBody pre {

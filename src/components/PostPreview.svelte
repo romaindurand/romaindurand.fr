@@ -1,11 +1,16 @@
 <script lang="ts">
+	import { targetBlankLinks } from '$lib';
 	import './PostBody.css';
 
 	import showdown from 'showdown';
 	import showdownHighlight from 'showdown-highlight';
+	import { onMount, tick } from 'svelte';
 	import { Youtube } from 'svelte-youtube-lite';
 
 	export let markdown: string = '';
+	let splitHtml: string[] = [];
+
+	onMount(targetBlankLinks);
 
 	const converter = new showdown.Converter({
 		extensions: [
@@ -30,16 +35,22 @@
 	}
 
 	$: html = converter.makeHtml(markdown);
-	$: splitHtml = html.split('\n<p>!yt:').reduce((memo, line, index) => {
-		if (index === 0) {
-			memo.push(line);
+	$: {
+		splitHtml = html.split('\n<p>!yt:').reduce((memo, line, index) => {
+			if (index === 0) {
+				memo.push(line);
+				return memo;
+			}
+			const [youtubeUrl, ...rest] = line.split('</p>');
+			memo.push(`<p>!yt:${getYoutubeIdFromUrl(youtubeUrl)}</p>`);
+			memo.push(rest.join('</p>'));
 			return memo;
-		}
-		const [youtubeUrl, ...rest] = line.split('</p>');
-		memo.push(`<p>!yt:${getYoutubeIdFromUrl(youtubeUrl)}</p>`);
-		memo.push(rest.join('</p>'));
-		return memo;
-	}, [] as string[]);
+		}, [] as string[]);
+
+		tick().then(() => {
+			targetBlankLinks();
+		});
+	}
 </script>
 
 <div class="PostBody">

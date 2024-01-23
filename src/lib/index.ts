@@ -9,3 +9,11 @@ export function getSlug(post: Post) {
 		.replace(/[^a-z0-9\s]/g, '-');
 	return slug;
 }
+
+export function targetBlankLinks() {
+	if (typeof document === 'undefined') return;
+	document.querySelectorAll('.PostBody a').forEach((link) => {
+		link.setAttribute('target', '_blank');
+		link.setAttribute('rel', 'noopener');
+	});
+}
