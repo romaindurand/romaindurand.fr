@@ -1,64 +1,10 @@
 <script lang="ts">
-	import { targetBlankLinks } from '$lib';
-	import './PostBody.css';
-
-	import showdown from 'showdown';
-	import showdownHighlight from 'showdown-highlight';
-	import { onMount, tick } from 'svelte';
-	import { Youtube } from 'svelte-youtube-lite';
+	import PostBody from '$components/PostBody.svelte';
+	import { converter } from '$lib/showdown';
+	// imports showdown client-side, to allow for live preview without api calls
 
 	export let markdown: string = '';
-	let splitHtml: string[] = [];
-
-	onMount(targetBlankLinks);
-
-	const converter = new showdown.Converter({
-		extensions: [
-			showdownHighlight({
-				auto_detection: true
-			})
-		]
-	});
-
-	function getYoutubeIdFromUrl(url: string) {
-		const youtubeUrl = new URL(url);
-		const youtubeId = youtubeUrl.searchParams.get('v');
-		return youtubeId;
-	}
-
-	function getYoutubeIdFromHtmlLine(line: string) {
-		return line.replace('<p>!yt:', '').replace('</p>', '');
-	}
-
-	function shouldReplaceByYoutubeComponent(line: string) {
-		return line.startsWith('<p>!yt:');
-	}
-
 	$: html = converter.makeHtml(markdown);
-	$: {
-		splitHtml = html.split('\n<p>!yt:').reduce((memo, line, index) => {
-			if (index === 0) {
-				memo.push(line);
-				return memo;
-			}
-			const [youtubeUrl, ...rest] = line.split('</p>');
-			memo.push(`<p>!yt:${getYoutubeIdFromUrl(youtubeUrl)}</p>`);
-			memo.push(rest.join('</p>'));
-			return memo;
-		}, [] as string[]);
-
-		tick().then(() => {
-			targetBlankLinks();
-		});
-	}
 </script>
 
-<div class="PostBody">
-	{#each splitHtml as line}
-		{#if shouldReplaceByYoutubeComponent(line)}
-			<Youtube id={getYoutubeIdFromHtmlLine(line)} />
-		{:else}
-			{@html line}
-		{/if}
-	{/each}
-</div>
+<PostBody {html} />

@@ -1,16 +1,8 @@
+import type { PageServerLoad } from './$types';
+
 import { getPost } from '$lib/prisma';
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
-import Showdown from 'showdown';
-import showdownHighlight from 'showdown-highlight';
-
-const converter = new Showdown.Converter({
-	extensions: [
-		showdownHighlight({
-			auto_detection: true
-		})
-	]
-});
+import { converter } from '$lib/showdown';
 
 export const load: PageServerLoad = async (event) => {
 	const postId = getIdFromSlug(event.params.slug);
