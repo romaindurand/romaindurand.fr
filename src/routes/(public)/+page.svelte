@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Youtube } from 'svelte-youtube-lite';
 	import { onMount } from 'svelte';
 	import { getSlug } from '$lib';
 	import Filter from '$components/Filter.svelte';
