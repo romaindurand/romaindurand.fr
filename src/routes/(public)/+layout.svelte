@@ -141,7 +141,7 @@
 		color: red;
 	}
 
-	@media (max-width: 500px) {
+	@media (max-width: 520px) {
 		nav {
 			border: none;
 		}
@@ -155,10 +155,12 @@
 			font-size: 1.5rem;
 			padding: 0.5rem;
 			display: block;
-			border-right: none;
 			border-bottom: 4px solid var(--color-text);
-			width: 100%;
 			text-align: center;
+		}
+
+		nav li {
+			border-right: none;
 		}
 	}
 </style>
