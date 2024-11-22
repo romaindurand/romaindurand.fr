@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { matchesComponent, parseTag, splitOnComponent } from '$lib/markdown';
 	import './PostBody.css';
+	// import './shiki-twoslash.css';
+	import '@shikijs/twoslash/style-classic.css';
 
 	import { Youtube } from 'svelte-youtube-lite';
 	import { targetBlankLinks } from '$lib';
@@ -28,3 +30,14 @@
 		{/if}
 	{/each}
 </div>
+
+<style>
+	.PostBody :global(pre .error) {
+		position: relative;
+	}
+
+	.PostBody :global(pre .error-behind) {
+		content: 'Error:';
+		display: none;
+	}
+</style>

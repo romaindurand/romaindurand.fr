@@ -2,14 +2,21 @@ import type { PageServerLoad } from './$types';
 
 import { getPost } from '$lib/prisma';
 import { error } from '@sveltejs/kit';
-import { converter } from '$lib/showdown';
 
 export const load: PageServerLoad = async (event) => {
 	const postId = getIdFromSlug(event.params.slug);
 	const post = await getPost(postId);
 	if (!post) error(404, 'Post not found');
 	const { content, ...postWithoutMarkdown } = post;
-	const html = converter.makeHtml(content);
+	const response = await event.fetch('/render', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ markdown: content })
+	});
+	const data = await response.json();
+	const html = data.html;
 
 	return {
 		post: { ...postWithoutMarkdown, html }
