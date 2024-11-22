@@ -2,14 +2,15 @@
 	import { onDestroy, onMount } from 'svelte';
 	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 	import type { Post } from '@prisma/client';
-	import PostPreview from './PostPreview.svelte';
 	import { addCodeBlock } from '$lib/monaco';
+	import PostBody from './PostBody.svelte';
 
 	export let post: Post | null = null;
 
 	let editor: Monaco.editor.IStandaloneCodeEditor;
 	let monaco: typeof Monaco;
 	let editorContainer: HTMLElement;
+	let html: string = '';
 
 	let showPreview = false;
 	let content = post?.content || "```js\nconst test = 'toto';\n```";
@@ -69,13 +70,24 @@
 				<button
 					class="tab"
 					class:active={showPreview}
-					on:click|preventDefault={() => (showPreview = true)}
+					on:click|preventDefault={async () => {
+						const response = await fetch('/render', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({ markdown: content })
+						});
+						const data = await response.json();
+						html = data.html;
+						showPreview = true;
+					}}
 				>
 					Preview
 				</button>
 			</div>
 			<div class="preview" class:hidden={!showPreview}>
-				<PostPreview markdown={content} />
+				<PostBody {html} />
 			</div>
 			<div class="editor-wrapper" class:hidden={showPreview}>
 				<div class="toolbar">

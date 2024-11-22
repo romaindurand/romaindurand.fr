@@ -1,4 +1,7 @@
 <script lang="ts">
+	import type { Post } from '@prisma/client';
+	import type {} from './delete/[id]/$types';
+
 	export let data;
 	$: posts = data.posts;
 
@@ -8,7 +11,7 @@
 			if (confirm(`Are you sure you want to delete "${post.title}"?`)) {
 				const response = await fetch(`/admin/delete/${post.id}`, { method: 'DELETE' });
 				const { deletedPost } = await response.json();
-				posts = posts.filter((p) => p.id !== deletedPost.id);
+				posts = posts.filter((p: Post) => p.id !== deletedPost.id);
 			}
 		} catch (error) {
 			console.error(error);
