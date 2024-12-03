@@ -1,7 +1,13 @@
 <script lang="ts">
+	import '@fontsource/atkinson-hyperlegible';
 	import { page } from '$app/stores';
 	import { onNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	let theme: string;
 
@@ -36,7 +42,7 @@
 
 <h1>
 	<span>Romain Durand</span>
-	<button on:click={toggleTheme} class="toggle-theme"></button>
+	<button aria-label="changer le thème" onclick={toggleTheme} class="toggle-theme"></button>
 </h1>
 <nav>
 	<ul>
@@ -50,7 +56,7 @@
 	</ul>
 </nav>
 <div class="Layout">
-	<slot />
+	{@render children?.()}
 </div>
 
 <style>
@@ -60,26 +66,30 @@
 		margin: 0 auto;
 		border-left-style: solid;
 		border-right-style: solid;
-		border-image: linear-gradient(to bottom, var(--color-text), transparent) 0 100%;
+		border-color: var(--color-text);
 		border-width: 4px;
 		min-height: 100vh;
-		/* view-transition-name: site-content; */
+		transition: all 0.3s ease;
 	}
 
-	@media (max-width: 1000px) {
-		.Layout {
-			border-width: 0;
-		}
-	}
 	nav {
 		view-transition-name: site-nav;
-		display: flex;
-		border: 4px solid var(--color-text);
-		border-right: none;
-		justify-content: space-between;
+		font-family: var(--code-font);
+		& ul {
+			border: 4px solid var(--color-text);
+			border-top: none;
+			margin: auto;
+			width: 100%;
+			box-sizing: border-box;
+			max-width: calc(720px + 2rem + 8px);
+			display: flex;
+			justify-content: space-between;
+			transition: all 0.3s ease;
+		}
 	}
 
 	h1 {
+		font-family: var(--code-font);
 		display: flex;
 		justify-content: space-between;
 		view-transition-name: site-title;
@@ -90,6 +100,7 @@
 		border-bottom: none;
 		font-size: 1.1rem;
 		font-weight: normal;
+		transition: all 0.3s ease;
 	}
 	h1 .toggle-theme {
 		z-index: 10;
@@ -119,7 +130,6 @@
 	nav li {
 		font-weight: bold;
 		font-size: 2rem;
-		border-right: 4px solid var(--color-text);
 		box-sizing: border-box;
 	}
 
@@ -128,22 +138,24 @@
 		padding: 1rem;
 		text-decoration: none;
 		color: var(--color-text);
-		transition: all 0.3s ease;
+		transition:
+			color 0.3s ease,
+			background-color 0.3s ease;
 	}
 
 	nav li.active a {
-		color: red;
+		color: var(--color-red-on-text);
 		background-color: var(--color-text);
 	}
 
-	nav li:hover a,
+	nav li:hover:not(.active) a,
 	nav li.active {
-		color: red;
+		color: var(--color-red-on-bg);
 	}
 
 	@media (max-width: 520px) {
 		nav {
-			border: none;
+			border-bottom: none;
 		}
 		nav ul {
 			margin: 0;

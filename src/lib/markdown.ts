@@ -3,9 +3,9 @@
 export function splitOnComponent(markdown: string, components: string[]): string[] {
 	const lines = markdown.split('\n');
 	let preFlag = false;
-	return lines.reduce(
+	const result = lines.reduce(
 		(acc, line) => {
-			if (line.includes('<pre>')) preFlag = true;
+			if (line.includes('<pre')) preFlag = true;
 			if (line.includes('</pre>')) preFlag = false;
 			if (preFlag) {
 				line += '\n';
@@ -21,6 +21,7 @@ export function splitOnComponent(markdown: string, components: string[]): string
 		},
 		['']
 	);
+	return result;
 }
 
 export function matchesComponent(text: string, components: string[]): boolean {
