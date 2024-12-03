@@ -43,13 +43,13 @@
 {#each posts as post}
 	<div class="post">
 		<a href="post/{getSlug(post)}">
-			<div class="date">
+			<span class="title" style={`view-transition-name: post-title-${post.id};`}>{post.title}</span>
+			<div class="date" style={`view-transition-name: post-date-${post.id};`}>
 				Le {formatDate(post.createdAt, 'dd MMMM yyyy à hh:mm', {
 					locale: fr
 				})}
 			</div>
-			<span class="title" style={`view-transition-name: post-title-${post.id};`}>{post.title}</span>
-			<p style={`view-transition-name: post-chapo-${post.id};`}>{post.chapo}</p>
+			<p class="chapo" style={`view-transition-name: post-chapo-${post.id};`}>{post.chapo}</p>
 		</a>
 	</div>
 {/each}
@@ -83,6 +83,12 @@
 	}
 
 	.post .date {
+		margin: 0.5rem 0;
+		color: var(--color-grey-on-bg);
 		font-family: var(--code-font);
+	}
+	.post .chapo {
+		font-size: 1.2rem;
+		margin-top: 0.5rem;
 	}
 </style>

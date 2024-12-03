@@ -1,3 +1,5 @@
+import { createHash } from 'crypto';
+import { LRUCache } from 'lru-cache';
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
@@ -11,9 +13,34 @@ import rehypeStringify from 'rehype-stringify';
 export const POST: RequestHandler = async ({ request }) => {
 	const body = await request.json();
 	const markdown = body.markdown;
+
+	const sha = sha256(markdown);
+	const cached = cache.get(sha);
+	if (cached) {
+		return json({ html: cached });
+	}
+
 	const html = await render(markdown);
+	cache.set(sha, html);
+
 	return json({ html });
 };
+
+async function render(markdown: string) {
+	const ast = processor.parse(markdown);
+	const root = await processor.run(ast);
+	const html = processor.stringify(root);
+	// hide comments : // @ts-ignore hide
+	return html.replaceAll(
+		/\n<span class="line"><span style="[^"]*">\s*\/\/\s*?@ts-ignore hide<\/span><\/span>/gm,
+		''
+	);
+}
+
+const lruOptions = {
+	max: 100
+};
+const cache = new LRUCache<string, string>(lruOptions);
 
 const processor = unified()
 	.use(remarkParse)
@@ -31,13 +58,6 @@ const processor = unified()
 	})
 	.use(rehypeStringify, { allowDangerousHtml: true });
 
-async function render(markdown: string) {
-	const ast = processor.parse(markdown);
-	const root = await processor.run(ast);
-	const html = processor.stringify(root);
-	// hide comments : // @ts-ignore hide
-	return html.replaceAll(
-		/\n<span class="line"><span style="[^"]*">\s*\/\/\s*?@ts-ignore hide<\/span><\/span>/gm,
-		''
-	);
-}
+const sha256 = (input: string) => {
+	return createHash('sha256').update(input).digest('hex');
+};
