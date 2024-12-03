@@ -1,8 +1,8 @@
 <script lang="ts">
 	import PostBody from '$components/PostBody.svelte';
 
-	export let data;
-	$: post = data.post;
+	let { data } = $props();
+	let post = $derived(data.post);
 </script>
 
 <div class="content">

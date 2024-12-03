@@ -3,6 +3,11 @@
 	import { page } from '$app/stores';
 	import { onNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	let theme: string;
 
@@ -37,7 +42,7 @@
 
 <h1>
 	<span>Romain Durand</span>
-	<button on:click={toggleTheme} class="toggle-theme"></button>
+	<button aria-label="changer le thème" onclick={toggleTheme} class="toggle-theme"></button>
 </h1>
 <nav>
 	<ul>
@@ -51,7 +56,7 @@
 	</ul>
 </nav>
 <div class="Layout">
-	<slot />
+	{@render children?.()}
 </div>
 
 <style>

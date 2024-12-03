@@ -1,19 +1,25 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { onDestroy, onMount } from 'svelte';
 	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 	import type { Post } from '@prisma/client';
 	import { addCodeBlock } from '$lib/monaco';
 	import PostBody from './PostBody.svelte';
 
-	export let post: Post | null = null;
+	interface Props {
+		post?: Post | null;
+	}
 
-	let editor: Monaco.editor.IStandaloneCodeEditor;
+	let { post = null }: Props = $props();
+
+	let editor: Monaco.editor.IStandaloneCodeEditor | undefined = $state();
 	let monaco: typeof Monaco;
-	let editorContainer: HTMLElement;
-	let html: string = '';
+	let editorContainer: HTMLElement | undefined = $state();
+	let html: string = $state('');
 
-	let showPreview = false;
-	let content = post?.content || "```js\nconst test = 'toto';\n```";
+	let showPreview = $state(false);
+	let content = $state(post?.content || "```js\nconst test = 'toto';\n```");
 
 	function adjustHeight(textarea: HTMLTextAreaElement) {
 		resetHeight();
@@ -27,8 +33,7 @@
 
 	onMount(async () => {
 		monaco = (await import('$lib/monaco-front')).default;
-
-		editor = monaco.editor.create(editorContainer, {
+		editor = monaco.editor.create(editorContainer!, {
 			value: content,
 			language: 'markdown',
 			wordWrap: 'on',
@@ -65,12 +70,12 @@
 				<button
 					class="tab"
 					class:active={!showPreview}
-					on:click|preventDefault={() => (showPreview = false)}>Edit</button
+					onclick={preventDefault(() => (showPreview = false))}>Edit</button
 				>
 				<button
 					class="tab"
 					class:active={showPreview}
-					on:click|preventDefault={async () => {
+					onclick={preventDefault(async () => {
 						const response = await fetch('/render', {
 							method: 'POST',
 							headers: {
@@ -81,7 +86,7 @@
 						const data = await response.json();
 						html = data.html;
 						showPreview = true;
-					}}
+					})}
 				>
 					Preview
 				</button>
@@ -91,11 +96,11 @@
 			</div>
 			<div class="editor-wrapper" class:hidden={showPreview}>
 				<div class="toolbar">
-					<button on:click|preventDefault={() => addCodeBlock(editor)}>Code block</button>
+					<button onclick={() => addCodeBlock(editor!)}>Code block</button>
 				</div>
-				<div class="editor" bind:this={editorContainer} />
+				<div class="editor" bind:this={editorContainer}></div>
 			</div>
-			<textarea name="content" bind:value={content} class="hidden" use:adjustHeight />
+			<textarea name="content" bind:value={content} class="hidden" use:adjustHeight></textarea>
 		</div>
 		<button type="submit">{post ? 'Update' : 'Create'}</button>
 	</div>

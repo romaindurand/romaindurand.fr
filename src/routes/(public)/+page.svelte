@@ -5,9 +5,13 @@
 	import { fr } from 'date-fns/locale';
 	// import Filter from '$components/Filter.svelte';
 
-	export let data;
+	interface Props {
+		data: any;
+	}
 
-	$: posts = data.posts;
+	let { data }: Props = $props();
+
+	let posts = $derived(data.posts);
 
 	let filters = [
 		{ name: 'category1', active: true },

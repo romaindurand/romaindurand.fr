@@ -1,14 +1,20 @@
-<script>
-	export let isChecked = false;
+<script lang="ts">
+	interface Props {
+		isChecked?: boolean;
+		ariaLabel?: string;
+	}
 
-	function toggle() {
+	let { isChecked = $bindable(false), ariaLabel }: Props = $props();
+
+	function toggle(e: MouseEvent) {
+		e.preventDefault();
 		isChecked = !isChecked;
 	}
 </script>
 
 <label class="toggle-button">
 	<input type="checkbox" bind:checked={isChecked} class="hidden-checkbox" />
-	<button class="toggle-slider" on:click|preventDefault={toggle}></button>
+	<button aria-label={ariaLabel || 'toggle button'} class="toggle-slider" onclick={toggle}></button>
 </label>
 
 <style>

@@ -1,9 +1,16 @@
 <script lang="ts">
-	export let active: boolean;
-	export let name: string;
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+	interface Props {
+		active: boolean;
+		name: string;
+	}
+
+	let { active, name }: Props = $props();
 </script>
 
-<button class="Filter" class:active on:click>
+<button class="Filter" class:active onclick={bubble('click')}>
 	#{name}
 </button>
 

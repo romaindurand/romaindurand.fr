@@ -1,8 +1,8 @@
 <script lang="ts">
 	import PostForm from '$components/PostForm.svelte';
 
-	export let data;
-	$: post = data.post;
+	let { data } = $props();
+	let post = $derived(data.post);
 </script>
 
 <PostForm {post} />

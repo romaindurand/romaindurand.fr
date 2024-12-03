@@ -1,5 +1,10 @@
-<script>
-	import { onMount } from 'svelte';
+<script lang="ts">
+	import { onMount, type Snippet } from 'svelte';
+	interface Props {
+		children?: Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	onMount(() => {
 		document.documentElement.setAttribute('data-theme', 'light');
@@ -7,7 +12,7 @@
 </script>
 
 <div class="Layout">
-	<slot />
+	{@render children?.()}
 </div>
 
 <style>

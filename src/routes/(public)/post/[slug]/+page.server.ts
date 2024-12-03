@@ -1,9 +1,7 @@
-import type { PageServerLoad } from './$types';
-
 import { getPost } from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async (event) => {
+export async function load(event) {
 	const postId = getIdFromSlug(event.params.slug);
 	if (Number.isNaN(postId)) error(404, 'Post not found');
 	const post = await getPost(postId);
@@ -22,8 +20,10 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		post: { ...postWithoutMarkdown, html }
 	};
-};
+}
 
 function getIdFromSlug(slug: string) {
 	return Number(slug.split('-').pop());
 }
+
+export type Post = Awaited<ReturnType<typeof load>>['post'];

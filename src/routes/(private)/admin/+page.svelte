@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import type { Post } from '@prisma/client';
 	import type {} from './delete/[id]/$types';
 
-	export let data;
-	$: posts = data.posts;
+	let { data } = $props();
+	let posts = $state(data.posts);
 
 	async function deletePost(i: number) {
 		try {
@@ -26,7 +28,7 @@
 {#each data.posts as post, i (i)}
 	<div class="post">
 		<a href="/admin/edit/{post.id}">{post.title}</a>
-		<button on:click={() => deletePost(i)}>
+		<button onclick={() => deletePost(i)}>
 			<span role="img" aria-label="delete">❌</span>
 		</button>
 	</div>
