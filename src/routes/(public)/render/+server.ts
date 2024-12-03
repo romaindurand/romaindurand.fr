@@ -24,6 +24,7 @@ const processor = unified()
 		theme: 'one-dark-pro',
 		transformers: [
 			transformerTwoslash({
+				explicitTrigger: true,
 				renderer: rendererClassic()
 			})
 		]
