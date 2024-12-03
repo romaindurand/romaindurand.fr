@@ -55,5 +55,6 @@
 
 	.PostBody :global(pre .inline-completions ul.dropdown) {
 		position: relative;
+		font-size: 1rem;
 	}
 </style>
