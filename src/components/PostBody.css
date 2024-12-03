@@ -18,7 +18,7 @@
 }
 
 .PostBody a:hover {
-	color: red;
+	color: var(--color-red-on-bg);
 }
 
 .PostBody pre {
@@ -38,7 +38,6 @@
 }
 
 .PostBody code {
-	background-color: var(--color-code-background);
 	border: 1px solid #7f7f7f;
 	border-radius: 3px;
 	font-family: monospace;

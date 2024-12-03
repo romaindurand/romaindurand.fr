@@ -5,6 +5,7 @@ import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async (event) => {
 	const postId = getIdFromSlug(event.params.slug);
+	if (Number.isNaN(postId)) error(404, 'Post not found');
 	const post = await getPost(postId);
 	if (!post) error(404, 'Post not found');
 	const { content, ...postWithoutMarkdown } = post;

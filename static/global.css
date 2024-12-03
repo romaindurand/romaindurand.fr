@@ -1,22 +1,35 @@
 :root {
+	--font-family: 'Atkinson Hyperlegible', sans-serif;
+	--code-font: 'sudo', monospace;
+	font-size: 16px;
+
+	/* DARK */
 	--color-background: black;
 	--color-text: white;
 	--color-code-background: hsl(0 0% 5% / 1);
 	--color-grey: #7f7f7f;
-	--font-family: 'sudo', Verdana, Geneva, Tahoma, sans-serif;
+	--color-red-on-bg: red;
+	--color-red-on-text: #b60000;
 }
 
 [data-theme='light'] {
 	--color-background: white;
 	--color-text: black;
 	--color-code-background: hsl(0 0% 90% / 1);
+	--color-red-on-bg: #b60000;
+	--color-red-on-text: red;
 }
+
 body {
 	background-color: var(--color-background);
 	color: var(--color-text);
 	margin: 0;
 	font-family: var(--font-family);
-	transition: all 0.2s ease;
+	transition: all 0.3s ease;
+}
+
+a {
+	color: var(--color-red-on-bg);
 }
 
 @font-face {

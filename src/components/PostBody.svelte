@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { matchesComponent, parseTag, splitOnComponent } from '$lib/markdown';
 	import './PostBody.css';
-	// import './shiki-twoslash.css';
 	import '@shikijs/twoslash/style-classic.css';
 
 	import { Youtube } from 'svelte-youtube-lite';
@@ -39,5 +38,15 @@
 	.PostBody :global(pre .error-behind) {
 		content: 'Error:';
 		display: none;
+	}
+
+	.PostBody :global(pre .inline-completions ul.dropdown::before) {
+		top: initial;
+		left: initial;
+		transform: translate(-3px, -22px);
+	}
+
+	.PostBody :global(pre .inline-completions ul.dropdown) {
+		position: relative;
 	}
 </style>

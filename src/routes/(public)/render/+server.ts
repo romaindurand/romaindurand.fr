@@ -14,10 +14,11 @@ export const POST: RequestHandler = async ({ request }) => {
 	const html = await render(markdown);
 	return json({ html });
 };
+
 const processor = unified()
 	.use(remarkParse)
 	.use(remarkGFM)
-	.use(remarkRehype)
+	.use(remarkRehype, { allowDangerousHtml: true })
 	.use(rehypeSlug)
 	.use(rehypeShiki, {
 		theme: 'one-dark-pro',
@@ -27,11 +28,15 @@ const processor = unified()
 			})
 		]
 	})
-	.use(rehypeStringify);
+	.use(rehypeStringify, { allowDangerousHtml: true });
 
 async function render(markdown: string) {
 	const ast = processor.parse(markdown);
 	const root = await processor.run(ast);
 	const html = processor.stringify(root);
-	return html;
+	// hide comments : // @ts-ignore hide
+	return html.replaceAll(
+		/\n<span class="line"><span style="[^"]*">\s*\/\/\s*?@ts-ignore hide<\/span><\/span>/gm,
+		''
+	);
 }
