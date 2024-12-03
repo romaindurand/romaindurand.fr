@@ -69,6 +69,7 @@
 		border-color: var(--color-text);
 		border-width: 4px;
 		min-height: 100vh;
+		transition: all 0.3s ease;
 	}
 
 	nav {
@@ -83,6 +84,7 @@
 			max-width: calc(720px + 2rem + 8px);
 			display: flex;
 			justify-content: space-between;
+			transition: all 0.3s ease;
 		}
 	}
 
