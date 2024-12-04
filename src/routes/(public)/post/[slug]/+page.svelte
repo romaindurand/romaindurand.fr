@@ -10,7 +10,7 @@
 <div class="content">
 	<h1 style={`view-transition-name: post-title-${post.id};`}>{post.title}</h1>
 	<div class="date" style={`view-transition-name: post-date-${post.id};`}>
-		Le {formatDate(post.createdAt, 'dd MMMM yyyy à hh:mm', {
+		Le {formatDate(post.createdAt, 'dd MMMM yyyy à HH:mm', {
 			locale: fr
 		})}
 	</div>

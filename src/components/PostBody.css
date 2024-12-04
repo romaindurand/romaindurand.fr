@@ -26,12 +26,14 @@
 .PostBody pre code {
 	padding: 0;
 	border: none;
+	font-family: var(--code-font);
+	font-size: 1.2rem;
 }
 
 .PostBody code {
+	font-family: monospace;
 	border: 1px solid #7f7f7f;
 	border-radius: 3px;
-	font-family: var(--code-font);
-	font-size: 1.2rem;
+	font-size: 1rem;
 	padding: 0.1rem 0.3rem;
 }
