@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte';
+	import '../../../global.css';
 	interface Props {
 		children?: Snippet;
 	}

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
-
 	import { onDestroy, onMount } from 'svelte';
 	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 	import type { Post } from '@prisma/client';
@@ -70,12 +68,16 @@
 				<button
 					class="tab"
 					class:active={!showPreview}
-					onclick={preventDefault(() => (showPreview = false))}>Edit</button
+					onclick={(e) => {
+						e.preventDefault();
+						showPreview = false;
+					}}>Edit</button
 				>
 				<button
 					class="tab"
 					class:active={showPreview}
-					onclick={preventDefault(async () => {
+					onclick={async (e) => {
+						e.preventDefault();
 						const response = await fetch('/render', {
 							method: 'POST',
 							headers: {
@@ -86,7 +88,7 @@
 						const data = await response.json();
 						html = data.html;
 						showPreview = true;
-					})}
+					}}
 				>
 					Preview
 				</button>

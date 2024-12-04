@@ -32,7 +32,7 @@ async function render(markdown: string) {
 	const html = processor.stringify(root);
 	// hide comments : // @ts-ignore hide
 	return html.replaceAll(
-		/\n<span class="line"><span style="[^"]*">\s*\/\/\s*?@ts-ignore hide<\/span><\/span>/gm,
+		/(\n)?<span class="line"><span style="[^"]*">\s*\/\/\s*?@ts-ignore hide<\/span><\/span>(\n)?/gm,
 		''
 	);
 }

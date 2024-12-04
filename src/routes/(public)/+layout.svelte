@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { onNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import '../../global.css';
 	interface Props {
 		children?: import('svelte').Snippet;
 	}

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import type { Post } from '@prisma/client';
 	import type {} from './delete/[id]/$types';
 
@@ -28,7 +26,12 @@
 {#each data.posts as post, i (i)}
 	<div class="post">
 		<a href="/admin/edit/{post.id}">{post.title}</a>
-		<button onclick={() => deletePost(i)}>
+		<button
+			onclick={(e) => {
+				e.preventDefault();
+				deletePost(i);
+			}}
+		>
 			<span role="img" aria-label="delete">❌</span>
 		</button>
 	</div>
