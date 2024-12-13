@@ -21,6 +21,7 @@
 </script>
 
 <div class="new">
+	<a class="linkButton" href="/">←</a>
 	<a class="linkButton" href="admin/new">Nouveau post</a>
 </div>
 {#each data.posts as post, i (i)}
@@ -52,7 +53,7 @@
 	.linkButton {
 		display: inline-block;
 		padding: 0.5rem 1rem;
-		background: #eee;
+		border: 1px solid black;
 		border-radius: 0.5rem;
 		text-decoration: none;
 		color: #000;

@@ -3,10 +3,11 @@
 	import { getSlug } from '$lib';
 	import { formatDate } from 'date-fns';
 	import { fr } from 'date-fns/locale';
+	import type { PageData } from './$types';
 	// import Filter from '$components/Filter.svelte';
 
 	interface Props {
-		data: any;
+		data: PageData;
 	}
 
 	let { data }: Props = $props();
@@ -28,6 +29,10 @@
 		}
 	});
 </script>
+
+<svelte:head>
+	<title>Romain Durand</title>
+</svelte:head>
 
 <!-- {#each filters as { name, active }, i (i)}
 	<Filter

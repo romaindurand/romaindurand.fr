@@ -15,6 +15,7 @@
 	let monaco: typeof Monaco;
 	let editorContainer: HTMLElement | undefined = $state();
 	let html: string = $state('');
+	let unsavedChanges = $state(false);
 
 	let showPreview = $state(false);
 	let content = $state(post?.content || "```js\nconst test = 'toto';\n```");
@@ -43,6 +44,7 @@
 		const model = monaco.editor.createModel(content, 'markdown');
 		model.onDidChangeContent(() => {
 			content = model.getValue();
+			unsavedChanges = true;
 		});
 		editor.setModel(model);
 	});
@@ -52,6 +54,16 @@
 		editor?.dispose();
 	});
 </script>
+
+<a
+	class="back"
+	href="/admin"
+	onclick={(e) => {
+		if (unsavedChanges && !confirm('You have unsaved changes. Are you sure you want to leave?')) {
+			e.preventDefault();
+		}
+	}}>←</a
+>
 
 <form method="post">
 	<h1>{post ? 'Edit' : 'New'} post</h1>
@@ -98,7 +110,12 @@
 			</div>
 			<div class="editor-wrapper" class:hidden={showPreview}>
 				<div class="toolbar">
-					<button onclick={() => addCodeBlock(editor!)}>Code block</button>
+					<button
+						onclick={(e) => {
+							e.preventDefault();
+							addCodeBlock(editor!);
+						}}>Code block</button
+					>
 				</div>
 				<div class="editor" bind:this={editorContainer}></div>
 			</div>
@@ -109,6 +126,15 @@
 </form>
 
 <style>
+	.back {
+		border: 1px solid var(--color-grey);
+		padding: 0.5rem 1rem;
+		font-size: 2rem;
+		text-decoration: none;
+		color: var(--color-text);
+		font-weight: bolder;
+		font-family: var(--code-font);
+	}
 	.editor-wrapper {
 		width: 100%;
 		border: 1px solid #ccc;
@@ -116,10 +142,11 @@
 	}
 
 	.toolbar {
+		background-color: white;
 		display: flex;
 		gap: 1rem;
 		padding: 0.5rem;
-		border-bottom: 1px solid #ccc;
+		/* border-bottom: 1px solid #ccc; */
 	}
 
 	.editor {

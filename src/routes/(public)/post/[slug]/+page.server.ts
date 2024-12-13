@@ -10,7 +10,8 @@ export async function load(event) {
 	const response = await event.fetch('/render', {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'X-render-auth': process.env.LOGIN_KEY!
 		},
 		body: JSON.stringify({ markdown: content })
 	});
@@ -21,6 +22,8 @@ export async function load(event) {
 		post: { ...postWithoutMarkdown, html }
 	};
 }
+
+export type RenderedPost = Awaited<ReturnType<typeof load>>;
 
 function getIdFromSlug(slug: string) {
 	return Number(slug.split('-').pop());

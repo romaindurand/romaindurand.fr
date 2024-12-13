@@ -4,11 +4,13 @@
 	import { onNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import '../../global.css';
+	import type { LayoutData } from './$types';
 	interface Props {
 		children?: import('svelte').Snippet;
+		data: LayoutData;
 	}
 
-	let { children }: Props = $props();
+	let { children, data }: Props = $props();
 
 	let theme: string;
 
@@ -41,10 +43,25 @@
 	];
 </script>
 
-<h1>
+<svelte:head>
+	<meta name="description" content="Romain Durand, développeur web fullstack" />
+	<meta
+		name="keywords"
+		content="Romain Durand, typescript, svelte, javascript, sveltekit, web, fullstack, developer, développeur, blog"
+	/>
+	<meta name="author" content="Romain Durand" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="theme-color" content="#000000" />
+</svelte:head>
+<header>
 	<span>Romain Durand</span>
-	<button aria-label="changer le thème" onclick={toggleTheme} class="toggle-theme"></button>
-</h1>
+	<span>
+		{#if data.isAdmin}
+			<a href="/admin" class="admin-link">Admin</a>
+		{/if}
+		<button aria-label="changer le thème" onclick={toggleTheme} class="toggle-theme"></button>
+	</span>
+</header>
 <nav>
 	<ul>
 		{#each pages as { url: path, name }}
@@ -89,10 +106,11 @@
 		}
 	}
 
-	h1 {
+	header {
 		font-family: var(--code-font);
 		display: flex;
 		justify-content: space-between;
+		gap: 1rem;
 		view-transition-name: site-title;
 		color: var(--color-background);
 		background-color: var(--color-text);
@@ -103,11 +121,14 @@
 		font-weight: normal;
 		transition: all 0.3s ease;
 	}
-	h1 .toggle-theme {
+	header span {
+		position: relative;
+		display: flex;
+		gap: 1rem;
+	}
+	header .toggle-theme {
 		z-index: 10;
-		position: absolute;
 		right: 0.5rem;
-		display: block;
 		border: 1px solid var(--color-grey);
 		cursor: pointer;
 		height: 1.1rem;
@@ -117,7 +138,7 @@
 		transition: all 0.3s ease;
 	}
 
-	h1 .toggle-theme:hover {
+	header .toggle-theme:hover {
 		transform: scale(1.5);
 	}
 

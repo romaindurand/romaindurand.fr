@@ -1,11 +1,17 @@
 <script lang="ts">
 	import PostBody from '$components/PostBody.svelte';
+	import { getMetaDescription } from '$lib/seo.js';
 	import { formatDate } from 'date-fns';
 	import { fr } from 'date-fns/locale';
 
 	let { data } = $props();
 	let post = $derived(data.post);
 </script>
+
+<svelte:head>
+	<title>{post.title} - Romain Durand</title>
+	<meta name="description" content={getMetaDescription(post)} />
+</svelte:head>
 
 <div class="content">
 	<h1 style={`view-transition-name: post-title-${post.id};`}>{post.title}</h1>

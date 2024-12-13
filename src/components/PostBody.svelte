@@ -8,6 +8,7 @@
 	import { Youtube } from 'svelte-youtube-lite';
 	import { targetBlankLinks } from '$lib';
 	import type { Component, ComponentType, SvelteComponent } from 'svelte';
+	import TwoslashError from './TwoslashError.svelte';
 
 	interface Props {
 		html?: string;
@@ -16,7 +17,7 @@
 	let { html = '' }: Props = $props();
 
 	let splitHtml: string[] = $state([]);
-	const components: Record<string, Component<any>> = { Youtube };
+	const components: Record<string, Component<any>> = { Youtube, TwoslashError };
 	const componentNames = Object.keys(components);
 
 	run(() => {

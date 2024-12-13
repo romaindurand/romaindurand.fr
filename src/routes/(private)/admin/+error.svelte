@@ -1,12 +1,20 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 
 	interface Props {
 		children?: Snippet;
 	}
 
 	let { children }: Props = $props();
+
+	onMount(() => {
+		if ($page.status === 401) {
+			window.setTimeout(() => {
+				window.location.href = '/admin/login';
+			}, 1000);
+		}
+	});
 </script>
 
 <div class="Layout">

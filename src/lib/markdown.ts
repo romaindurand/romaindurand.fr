@@ -33,10 +33,10 @@ export function parseTag(tag: string): {
 	attributes: Record<string, string> | undefined;
 } {
 	const name = tag.match(/<(\w+)/)?.[1] ?? '';
-	const attributes = tag.match(/(\w+)=["'](.+?)["']/g)?.reduce(
+	const attributes = tag.match(/(\w+)=["](.+?)["]/g)?.reduce(
 		(acc, attribute) => {
 			const [key, value] = attribute.split('=');
-			acc[key] = value.replace(/["']/g, '');
+			acc[key] = value.replace(/["]/g, '');
 			return acc;
 		},
 		{} as Record<string, string>
