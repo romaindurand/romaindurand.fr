@@ -13,6 +13,7 @@
 }
 
 .PostBody pre {
+	position: relative;
 	background-color: var(--color-code-background);
 	border: 1px solid var(--color-grey);
 	border-radius: 3px;
@@ -30,11 +31,20 @@
 	font-size: 1.2rem;
 }
 
-.PostBody code {
+.PostBody p code {
 	font-family: monospace;
 	border: 1px solid #7f7f7f;
 	border-radius: 3px;
 	font-size: 1rem;
 	padding: 0.1rem 0.3rem;
-	white-space: no-wrap;
+	white-space: nowrap;
+}
+
+.PostBody pre.twoslash data-lsp:hover::before {
+	border: 1px solid var(--color-grey);
+	transform: translate(0.55rem, 2.3rem);
+	font-family: var(--code-font);
+	font-size: 1.2rem;
+	width: max-content;
+	box-sizing: border-box;
 }
