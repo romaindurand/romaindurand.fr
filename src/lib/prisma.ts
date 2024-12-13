@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export function getPosts(limit = 10, offset = 0) {
+export function getPosts(limit = 100, offset = 0) {
 	return prisma.post.findMany({
 		take: limit,
 		skip: offset,
