@@ -5,6 +5,7 @@
 	import { addCodeBlock, addCutComment } from '$lib/monaco';
 	import PostBody from './PostBody.svelte';
 	import LinkButton from './LinkButton.svelte';
+	import { format } from 'date-fns';
 
 	interface Props {
 		post?: Post | null;
@@ -109,9 +110,7 @@
 					<input
 						type="datetime-local"
 						name="createdAt"
-						value={post
-							? post.createdAt.toISOString().split('.')[0].split(':').slice(0, 2).join(':')
-							: null}
+						value={post ? format(post.createdAt, "yyyy-MM-dd'T'HH:mm") : null}
 					/>
 				</label>
 			</div>
