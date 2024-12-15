@@ -109,7 +109,9 @@
 					<input
 						type="datetime-local"
 						name="createdAt"
-						value={post ? post.createdAt.toISOString().split('.')[0] : null}
+						value={post
+							? post.createdAt.toISOString().split('.')[0].split(':').slice(0, 2).join(':')
+							: null}
 					/>
 				</label>
 			</div>

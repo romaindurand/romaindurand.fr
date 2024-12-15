@@ -8,6 +8,17 @@ export function getPosts(limit = 100, offset = 0) {
 		skip: offset,
 		orderBy: {
 			createdAt: 'desc'
+		},
+		where: {
+			published: true
+		}
+	});
+}
+
+export function getAllPosts() {
+	return prisma.post.findMany({
+		orderBy: {
+			id: 'desc'
 		}
 	});
 }
@@ -39,9 +50,13 @@ export async function createPost(post: {
 	});
 }
 
-export async function updatePost(id: number, title: string, chapo: string, content: string) {
+export async function updatePost(
+	id: number,
+	post: { title: string; chapo: string; content: string; createdAt: string; published: boolean }
+) {
+	const { title, chapo, content, createdAt, published } = post;
 	return prisma.post.update({
-		data: { content, title, chapo },
+		data: { title, chapo, content, createdAt, published },
 		where: { id }
 	});
 }

@@ -11,7 +11,7 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
 	default: async (event) => {
-		const { title, chapo, content } = await handlePostForm(event);
-		await updatePost(Number(event.params.id), title, chapo, content);
+		const { title, chapo, content, createdAt, published } = await handlePostForm(event);
+		await updatePost(Number(event.params.id), { title, chapo, content, createdAt, published });
 	}
 };
