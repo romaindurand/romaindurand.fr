@@ -18,6 +18,7 @@
 
 <style>
 	.Layout {
-		padding: 1rem;
+		padding: 1rem 1.5rem;
+		overflow-x: hidden;
 	}
 </style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Post } from '@prisma/client';
 	import type {} from './delete/[id]/$types';
+	import LinkButton from '$components/LinkButton.svelte';
 
 	let { data } = $props();
 	let posts = $state(data.posts);
@@ -21,8 +22,8 @@
 </script>
 
 <div class="new">
-	<a class="linkButton" href="/">←</a>
-	<a class="linkButton" href="admin/new">Nouveau post</a>
+	<LinkButton href="/">←</LinkButton>
+	<LinkButton href="admin/new">Nouveau post</LinkButton>
 </div>
 {#each data.posts as post, i (i)}
 	<div class="post">
@@ -48,14 +49,5 @@
 
 	.new {
 		margin-bottom: 1rem;
-	}
-
-	.linkButton {
-		display: inline-block;
-		padding: 0.5rem 1rem;
-		border: 1px solid black;
-		border-radius: 0.5rem;
-		text-decoration: none;
-		color: #000;
 	}
 </style>

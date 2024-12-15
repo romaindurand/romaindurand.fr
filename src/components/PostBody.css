@@ -19,9 +19,13 @@
 	border-radius: 3px;
 	line-height: 1.2;
 	padding: 1rem;
-	/* padding-bottom: 0; */
 	word-wrap: normal;
 	overflow: auto;
+	overflow-y: hidden;
+}
+
+.PostBody pre.twoslash {
+	padding: 1.5rem 1rem;
 }
 
 .PostBody pre code {
@@ -42,9 +46,10 @@
 
 .PostBody pre.twoslash data-lsp:hover::before {
 	border: 1px solid var(--color-grey);
-	transform: translate(0.55rem, 2.3rem);
+	transform: translate(-1rem, 1.4rem);
 	font-family: var(--code-font);
 	font-size: 1.2rem;
 	width: max-content;
 	box-sizing: border-box;
+	padding: 0.125rem 0.25rem;
 }

@@ -26,9 +26,16 @@ export async function deletePost(id: number) {
 	});
 }
 
-export async function createPost(title: string, chapo: string, content: string) {
+export async function createPost(post: {
+	title: string;
+	chapo: string;
+	content: string;
+	published: boolean;
+	createdAt: string;
+}) {
+	const { title, chapo, content, published, createdAt } = post;
 	return prisma.post.create({
-		data: { content, title, chapo }
+		data: { content, title, chapo, published, createdAt }
 	});
 }
 
