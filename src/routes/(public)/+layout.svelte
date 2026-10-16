@@ -119,10 +119,12 @@
 	.prompt {
 		display: inline-flex;
 		align-items: center;
+		min-width: 0;
 		min-height: 44px;
+		white-space: nowrap;
 		font-family: var(--code-font);
 		font-weight: 700;
-		font-size: 1.125rem;
+		font-size: clamp(0.875rem, 4.6vw, 1.125rem);
 		color: var(--color-text);
 		text-decoration: none;
 	}
