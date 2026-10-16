@@ -149,6 +149,9 @@
 		gap: 1rem;
 	}
 	.admin-link {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
 		font-family: var(--code-font);
 		color: var(--color-text);
 	}
@@ -226,6 +229,7 @@
 	footer {
 		display: flex;
 		flex-wrap: wrap;
+		align-items: center;
 		justify-content: space-between;
 		gap: 0.75rem;
 		padding: 3rem 0 3.5rem;
@@ -236,6 +240,9 @@
 		color: var(--color-grey-on-bg);
 	}
 	footer a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
 		font-weight: 700;
 		color: var(--color-text);
 	}
