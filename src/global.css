@@ -1,25 +1,30 @@
 :root {
-	--font-family: 'Atkinson Hyperlegible', sans-serif;
-	--code-font: 'sudo', monospace;
+	--font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+	--code-font: 'sudo', ui-monospace, monospace;
 	font-size: 16px;
 
 	/* DARK */
-	--color-background: #111;
-	--color-text: #eee;
-	--color-code-background: hsl(0 0% 5% / 1);
+	--color-background: #111111;
+	--color-text: #eeeeee;
 	--color-grey: #7f7f7f;
-	--color-red-on-bg: red;
+	--color-grey-on-bg: #bbbbbb;
+	--color-red-on-bg: #ff0000;
 	--color-red-on-text: #b60000;
-	--color-grey-on-bg: #9f9f9f;
+	--color-on-accent: #111111;
+	--color-surface: #1c1c1c;
+	--color-code-kw: #ff3b30;
+	--color-code-background: var(--color-surface);
 }
 
 [data-theme='light'] {
-	--color-background: #eee;
-	--color-text: #111;
-	--color-code-background: hsl(0 0% 90% / 1);
+	--color-background: #eeeeee;
+	--color-text: #111111;
+	--color-grey-on-bg: #444444;
 	--color-red-on-bg: #b60000;
-	--color-red-on-text: red;
-	--color-grey-on-bg: #4f4f4f;
+	--color-red-on-text: #ff0000;
+	--color-on-accent: #eeeeee;
+	--color-surface: #e0e0e0;
+	--color-code-kw: #b60000;
 }
 
 body {
@@ -27,7 +32,9 @@ body {
 	color: var(--color-text);
 	margin: 0;
 	font-family: var(--font-family);
-	transition: all 0.3s ease;
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
 }
 
 a {
@@ -37,7 +44,8 @@ a {
 @font-face {
 	font-family: 'sudo';
 	font-style: normal;
-	font-weight: 400;
+	font-weight: 100 700;
+	font-display: swap;
 	src:
 		local('SudoVariable'),
 		local('Sudo'),
@@ -77,4 +85,15 @@ a {
 :root::view-transition-new(root) {
 	animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in;
 	/* 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right; */
+}
+
+:focus-visible {
+	outline: 4px solid var(--color-red-on-bg);
+	outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		transition: none !important;
+	}
 }
