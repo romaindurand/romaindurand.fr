@@ -53,8 +53,6 @@
 	.rail {
 		flex: 0 0 150px;
 		align-self: flex-start;
-		position: sticky;
-		top: 1.5rem;
 	}
 	.meta {
 		font-family: var(--code-font);
@@ -91,6 +89,8 @@
 	.pager {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+		gap: 2px;
+		background: var(--color-text);
 		border: 2px solid var(--color-text);
 		margin-top: 2rem;
 	}
@@ -99,11 +99,9 @@
 		flex-direction: column;
 		gap: 0.375rem;
 		padding: 1.25rem;
+		background: var(--color-background);
 		color: var(--color-text);
 		text-decoration: none;
-	}
-	.pager a + a {
-		border-left: 2px solid var(--color-text);
 	}
 	.pager a.next {
 		text-align: right;
@@ -129,13 +127,10 @@
 		font-size: 1.125rem;
 		line-height: 1.3;
 	}
-	@media (max-width: 520px) {
+	@media (min-width: 640px) {
 		.rail {
-			position: static;
-		}
-		.pager a + a {
-			border-left: none;
-			border-top: 2px solid var(--color-text);
+			position: sticky;
+			top: 1.5rem;
 		}
 	}
 </style>
