@@ -19,13 +19,28 @@
 	const components = { Youtube, TwoslashError };
 	const componentNames = Object.keys(components);
 
+	async function onClick(event: MouseEvent) {
+		const button = (event.target as Element).closest<HTMLButtonElement>('[data-copy]');
+		if (!button) return;
+		const lines = button.closest('.codeblock')?.querySelectorAll('pre .line');
+		const text = Array.from(lines ?? [], (line) => line.textContent ?? '').join('\n');
+		try {
+			await navigator.clipboard.writeText(text);
+			button.textContent = 'COPIÉ';
+		} catch {
+			button.textContent = 'ERREUR';
+		}
+		setTimeout(() => (button.textContent = 'COPIER'), 1600);
+	}
+
 	run(() => {
 		splitHtml = splitOnComponent(html, componentNames);
 		targetBlankLinks();
 	});
 </script>
 
-<div class="PostBody">
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+<div class="PostBody" onclick={onClick}>
 	{#each splitHtml as line, index (index)}
 		{#if matchesComponent(line, componentNames)}
 			{@const { name, attributes } = parseTag(line)}
