@@ -1,4 +1,5 @@
-import { getPost } from '#lib/prisma.js';
+import { getPost, getPosts } from '#lib/prisma.js';
+import { getNeighbors } from '#lib/posts.js';
 import { error } from '@sveltejs/kit';
 import { LOGIN_KEY } from '$app/env/private';
 
@@ -19,8 +20,17 @@ export async function load(event) {
 	const data = await response.json();
 	const html = data.html;
 
+	const { newer, older } = getNeighbors(await getPosts(), post.id);
+	const strip = <T extends { content: string }>(p: T | null) => {
+		if (!p) return null;
+		const { content: _content, ...rest } = p; // eslint-disable-line @typescript-eslint/no-unused-vars
+		return rest;
+	};
+
 	return {
-		post: { ...postWithoutMarkdown, html }
+		post: { ...postWithoutMarkdown, html },
+		newer: strip(newer),
+		older: strip(older)
 	};
 }
 
