@@ -207,6 +207,8 @@
 		width: 25%;
 		background: var(--color-red-on-bg);
 		transform: translateX(calc(var(--i) * 100%));
+		/* own transition group: otherwise the site-nav snapshot crossfades the bar instead of sliding it */
+		view-transition-name: nav-indicator;
 	}
 	@media (prefers-reduced-motion: no-preference) {
 		.cursor {
