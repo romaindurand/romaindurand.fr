@@ -20,7 +20,7 @@
 		<span class="meta" style={`view-transition-name: post-date-${post.id};`}>{day}<br />{time}</span
 		>
 	</div>
-	<div class="prose">
+	<div class="article">
 		<header>
 			<h1 style={`view-transition-name: post-title-${post.id};`}>{post.title}</h1>
 			<p class="chapo" style={`view-transition-name: post-chapo-${post.id};`}>{post.chapo}</p>
@@ -60,7 +60,7 @@
 		line-height: 1.6;
 		color: var(--color-grey-on-bg);
 	}
-	.prose {
+	.article {
 		flex: 1 1 380px;
 		min-width: 0;
 		display: flex;
