@@ -16,6 +16,8 @@
 	<title>Romain Durand</title>
 </svelte:head>
 
+<h1 class="sr-only">Journal de Romain Durand</h1>
+
 <section aria-label="Articles">
 	{#each posts as post (post.id)}
 		{@const { day, time } = formatPostDate(post.createdAt)}
