@@ -1,6 +1,6 @@
 <script lang="ts">
-	import PostBody from '$components/PostBody.svelte';
-	import { getMetaDescription } from '$lib/seo.js';
+	import PostBody from '#components/PostBody.svelte';
+	import { getMetaDescription } from '#lib/seo.js';
 	import { formatDate } from 'date-fns';
 	import { fr } from 'date-fns/locale';
 

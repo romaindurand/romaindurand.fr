@@ -1,8 +1,8 @@
-import { checkAuth } from '$lib/auth';
+import { checkAuth } from '#lib/auth.js';
 import { resolve } from 'node:path';
 import { readFile } from 'fs/promises';
 import type { PageServerLoad } from '../$types';
-import { dev } from '$app/environment';
+import { dev } from '$app/env';
 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

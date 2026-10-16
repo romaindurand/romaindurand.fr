@@ -9,6 +9,8 @@
 	let { href, onclick, children }: Props = $props();
 </script>
 
+<!-- The reusable component receives an already resolved internal URL. -->
+<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 <a class="LinkButton" {href} {onclick}>{@render children()}</a>
 
 <style>

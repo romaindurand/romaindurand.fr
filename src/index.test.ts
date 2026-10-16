@@ -1,4 +1,4 @@
-import { parseTag, splitOnComponent } from '$lib/markdown';
+import { parseTag, splitOnComponent } from '#lib/markdown.js';
 import { describe, it, expect } from 'vitest';
 
 describe('splitOnComponent', () => {

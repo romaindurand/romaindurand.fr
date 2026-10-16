@@ -1,7 +1,3 @@
-<script>
-	import Wip from '$components/WIP.svelte';
-</script>
-
 <ul>
 	<li>BlueSky : <a href="https://bsky.app/profile/romaindurand.dev">@romaindurand.dev</a></li>
 	<li>

@@ -1,4 +1,4 @@
-import type { Post } from '@prisma/client';
+import type { Post } from '../../generated/prisma/client';
 
 export function getSlug(post: Post) {
 	const slug = `${post.title}-${post.id}`

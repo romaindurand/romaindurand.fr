@@ -1,6 +1,6 @@
-import { checkAuth } from '$lib/auth';
-import { handlePostForm } from '$lib/post-form';
-import { getPost, updatePost } from '$lib/prisma';
+import { checkAuth } from '#lib/auth.js';
+import { handlePostForm } from '#lib/post-form.js';
+import { getPost, updatePost } from '#lib/prisma.js';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {

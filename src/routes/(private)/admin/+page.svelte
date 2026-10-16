@@ -1,14 +1,19 @@
 <script lang="ts">
-	import type { Post } from '@prisma/client';
+	import { resolve } from '$app/paths';
+	import type { Post } from '../../../../generated/prisma/client';
 	import type {} from './delete/[id]/$types';
-	import LinkButton from '$components/LinkButton.svelte';
+	import LinkButton from '#components/LinkButton.svelte';
 
 	let { data } = $props();
-	let posts = $state(data.posts);
+	let posts = $state(initialPosts());
+
+	function initialPosts() {
+		return data.posts;
+	}
 
 	async function deletePost(i: number) {
 		try {
-			const post = data.posts[i];
+			const post = posts[i];
 			if (confirm(`Are you sure you want to delete "${post.title}"?`)) {
 				const response = await fetch(`/admin/delete/${post.id}`, { method: 'DELETE' });
 				const { deletedPost } = await response.json();
@@ -22,12 +27,12 @@
 </script>
 
 <div class="new">
-	<LinkButton href="/">←</LinkButton>
-	<LinkButton href="admin/new">Nouveau post</LinkButton>
+	<LinkButton href={resolve('/(public)')}>←</LinkButton>
+	<LinkButton href={resolve('/(private)/admin/new')}>Nouveau post</LinkButton>
 </div>
-{#each data.posts as post, i (i)}
+{#each posts as post, i (post.id)}
 	<div class="post">
-		<a href="/admin/edit/{post.id}">{post.title}</a>
+		<a href={resolve('/(private)/admin/edit/[id]', { id: String(post.id) })}>{post.title}</a>
 		<button
 			onclick={(e) => {
 				e.preventDefault();

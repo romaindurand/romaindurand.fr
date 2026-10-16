@@ -1,6 +1,7 @@
 import { Youtube } from 'svelte-youtube-lite';
+import type { Component } from 'svelte';
 
-export const components: Record<string, ConstructorOfATypedSvelteComponent> = {
+export const components: Record<string, Component> = {
 	Youtube
 };
 

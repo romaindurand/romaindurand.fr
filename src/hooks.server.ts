@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 import { get } from 'svelte/store';
 import { sessions } from './stores/sessions';
 

@@ -1,6 +1,7 @@
 import { createHash } from 'crypto';
 import { LRUCache } from 'lru-cache';
-import { json, type RequestHandler } from '@sveltejs/kit';
+import type { RequestHandler } from '@sveltejs/kit';
+import { LOGIN_KEY } from '$app/env/private';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -9,7 +10,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeShiki from '@shikijs/rehype';
 import { rendererClassic, transformerTwoslash } from '@shikijs/twoslash';
 import rehypeStringify from 'rehype-stringify';
-import { isAuthenticated } from '$lib/auth';
+import { isAuthenticated } from '#lib/auth.js';
 
 export const POST: RequestHandler = async (event) => {
 	const { request } = event;
@@ -17,8 +18,8 @@ export const POST: RequestHandler = async (event) => {
 	// use admin cookie auth for post preview
 	// use env secret for public posts rendering
 	const renderAuth = request.headers.get('x-render-auth');
-	if (renderAuth !== process.env.LOGIN_KEY && !isAuthenticated(event)) {
-		return json({ error: 'Unauthorized' }, { status: 401 });
+	if (renderAuth !== LOGIN_KEY && !isAuthenticated(event)) {
+		return Response.json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
 	const body = await request.json();
@@ -28,13 +29,13 @@ export const POST: RequestHandler = async (event) => {
 	const sha = sha256(markdown);
 	const cached = cache.get(sha);
 	if (cached) {
-		return json({ html: cached });
+		return Response.json({ html: cached });
 	}
 
 	const html = await render(markdown);
 	cache.set(sha, html);
 
-	return json({ html });
+	return Response.json({ html });
 };
 
 async function render(markdown: string) {

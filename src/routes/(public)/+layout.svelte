@@ -1,17 +1,18 @@
 <script lang="ts">
 	import '@fontsource/atkinson-hyperlegible';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 	import { onNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import '../../global.css';
 	import type { LayoutData } from './$types';
+
 	interface Props {
 		children?: import('svelte').Snippet;
 		data: LayoutData;
 	}
 
 	let { children, data }: Props = $props();
-
 	let theme: string;
 
 	onMount(() => {
@@ -19,6 +20,7 @@
 	});
 
 	onNavigate((navigation) => {
+		if (navigation.shallow && navigation.type === 'goto') return;
 		if (!document.startViewTransition) return;
 
 		return new Promise((resolve) => {
@@ -36,15 +38,16 @@
 	}
 
 	const pages = [
-		{ url: '', name: 'BLOG' },
-		{ url: 'projects', name: 'PROJETS' },
-		{ url: 'contact', name: 'CONTACT' },
-		{ url: 'about', name: 'À PROPOS' }
-	];
+		{ url: '', href: '/(public)', name: 'BLOG' },
+		{ url: 'projects', href: '/(public)/projects', name: 'PROJETS' },
+		{ url: 'contact', href: '/(public)/contact', name: 'CONTACT' },
+		{ url: 'about', href: '/(public)/about', name: 'À PROPOS' }
+	] as const;
 </script>
 
 <svelte:head>
 	<meta name="description" content="Romain Durand, développeur web fullstack" />
+
 	<meta
 		name="keywords"
 		content="Romain Durand, typescript, svelte, javascript, sveltekit, web, fullstack, developer, développeur, blog"
@@ -57,18 +60,16 @@
 	<span>Romain Durand</span>
 	<span>
 		{#if data.isAdmin}
-			<a href="/admin" class="admin-link">Admin</a>
+			<a href={resolve('/(private)/admin')} class="admin-link">Admin</a>
 		{/if}
 		<button aria-label="changer le thème" onclick={toggleTheme} class="toggle-theme"></button>
 	</span>
 </header>
 <nav>
 	<ul>
-		{#each pages as { url: path, name }}
-			<li class:active={$page.url.pathname.replace(/\//g, '') === path}>
-				<a href={`/${path}`}>
-					{name}
-				</a>
+		{#each pages as { url: path, href, name } (path)}
+			<li class:active={page.url.pathname.replace(/\//g, '') === path}>
+				<a href={resolve(href)}>{name}</a>
 			</li>
 		{/each}
 	</ul>

@@ -9,7 +9,9 @@
 
 <div>
 	<em>{title}</em>
-	<pre>{@html recommendation}<br /><br />{@html description}</pre>
+	<pre><!-- eslint-disable-next-line svelte/no-at-html-tags -->
+		{@html recommendation}<br /><!-- eslint-disable-next-line svelte/no-at-html-tags -->
+		{@html description}</pre>
 </div>
 
 <style>

@@ -1,6 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { PrismaClient } from '../../generated/prisma/client';
 
-const prisma = new PrismaClient();
+const adapter = new PrismaBetterSqlite3({
+	url: process.env.DATABASE_URL ?? 'file:./prisma/dev.db'
+});
+const prisma = new PrismaClient({ adapter });
 
 export function getPosts(limit = 100, offset = 0) {
 	return prisma.post.findMany({

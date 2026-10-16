@@ -1,5 +1,6 @@
-import { getPost } from '$lib/prisma';
+import { getPost } from '#lib/prisma.js';
 import { error } from '@sveltejs/kit';
+import { LOGIN_KEY } from '$app/env/private';
 
 export async function load(event) {
 	const postId = getIdFromSlug(event.params.slug);
@@ -11,7 +12,7 @@ export async function load(event) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			'X-render-auth': process.env.LOGIN_KEY!
+			'X-render-auth': LOGIN_KEY
 		},
 		body: JSON.stringify({ markdown: content })
 	});

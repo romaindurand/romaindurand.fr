@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
-	import type { Post } from '@prisma/client';
-	import { addCodeBlock, addCutComment } from '$lib/monaco';
+	import { resolve } from '$app/paths';
+	import type * as Monaco from 'monaco-editor';
+	import type { Post } from '../../generated/prisma/client';
+	import { addCodeBlock, addCutComment } from '#lib/monaco.js';
 	import PostBody from './PostBody.svelte';
 	import LinkButton from './LinkButton.svelte';
 	import { format } from 'date-fns';
@@ -18,21 +19,15 @@
 	let html: string = $state('');
 	let unsavedChanges = $state(false);
 	let activeTab = $state('edit');
-	let content = $state(post?.content || '');
+	let content = $state(initialContent());
 
-	function adjustHeight(textarea: HTMLTextAreaElement) {
-		resetHeight();
-		textarea.oninput = resetHeight;
-
-		function resetHeight() {
-			textarea.style.height = '';
-			textarea.style.height = textarea.scrollHeight + 2 + 'px';
-		}
+	function initialContent() {
+		return post?.content ?? '';
 	}
 
 	onMount(async () => {
 		console.log({ post });
-		let monaco = (await import('$lib/monaco-front')).default;
+		let monaco = (await import('#lib/monaco-front.js')).default;
 		editor = monaco.editor.create(editorContainer!, {
 			value: content,
 			language: 'markdown',
@@ -82,7 +77,7 @@
 
 <form method="post">
 	<LinkButton
-		href="/admin"
+		href={resolve('/(private)/admin')}
 		onclick={(e) => {
 			if (unsavedChanges && !confirm('You have unsaved changes. Are you sure you want to leave?')) {
 				e.preventDefault();

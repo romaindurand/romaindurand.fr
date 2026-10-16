@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { getSlug } from '$lib';
+	import { resolve } from '$app/paths';
+	import { getSlug } from '#lib';
 	import { formatDate } from 'date-fns';
 	import { fr } from 'date-fns/locale';
 	import type { PageData } from './$types';
@@ -13,21 +13,6 @@
 	let { data }: Props = $props();
 
 	let posts = $derived(data.posts);
-
-	let filters = [
-		{ name: 'category1', active: true },
-		{ name: 'category2', active: true },
-		{ name: 'category3', active: true }
-	];
-
-	onMount(() => {
-		const storedFilters = localStorage.getItem('filters');
-		// TODO: if stored filters names doesn't match with filters names, reset stored filters
-
-		if (storedFilters) {
-			filters = JSON.parse(storedFilters);
-		}
-	});
 </script>
 
 <svelte:head>
@@ -45,9 +30,9 @@
 	/>
 {/each} -->
 
-{#each posts as post}
+{#each posts as post (post.id)}
 	<div class="post">
-		<a href="post/{getSlug(post)}">
+		<a href={resolve('/(public)/post/[slug]', { slug: getSlug(post) })}>
 			<span class="title" style={`view-transition-name: post-title-${post.id};`}>{post.title}</span>
 			<div class="date" style={`view-transition-name: post-date-${post.id};`}>
 				Le {formatDate(post.createdAt, 'dd MMMM yyyy à HH:mm', {

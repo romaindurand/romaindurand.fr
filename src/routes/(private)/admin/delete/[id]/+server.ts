@@ -1,9 +1,8 @@
-import { checkAuth } from '$lib/auth';
-import { deletePost } from '$lib/prisma.js';
-import { json } from '@sveltejs/kit';
+import { checkAuth } from '#lib/auth.js';
+import { deletePost } from '#lib/prisma.js';
 
 export const DELETE = async (event) => {
 	checkAuth(event);
 	const deletedPost = await deletePost(Number(event.params.id));
-	return json({ ok: true, deletedPost });
+	return Response.json({ ok: true, deletedPost });
 };

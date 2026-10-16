@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy';
 
-	import { matchesComponent, parseTag, splitOnComponent } from '$lib/markdown';
+	import { matchesComponent, parseTag, splitOnComponent } from '#lib/markdown.js';
 	import './PostBody.css';
 	import '@shikijs/twoslash/style-classic.css';
 
 	import { Youtube } from 'svelte-youtube-lite';
-	import { targetBlankLinks } from '$lib';
-	import type { Component, ComponentType, SvelteComponent } from 'svelte';
+	import { targetBlankLinks } from '#lib';
 	import TwoslashError from './TwoslashError.svelte';
 
 	interface Props {
@@ -17,7 +16,7 @@
 	let { html = '' }: Props = $props();
 
 	let splitHtml: string[] = $state([]);
-	const components: Record<string, Component<any>> = { Youtube, TwoslashError };
+	const components = { Youtube, TwoslashError };
 	const componentNames = Object.keys(components);
 
 	run(() => {
@@ -27,12 +26,20 @@
 </script>
 
 <div class="PostBody">
-	{#each splitHtml as line}
+	{#each splitHtml as line, index (index)}
 		{#if matchesComponent(line, componentNames)}
 			{@const { name, attributes } = parseTag(line)}
-			{@const SvelteComponent_1 = components[name]}
-			<SvelteComponent_1 {...attributes} />
+			{#if name === 'Youtube'}
+				<Youtube {...attributes ?? {}} />
+			{:else if name === 'TwoslashError'}
+				<TwoslashError
+					title={attributes?.title ?? ''}
+					recommendation={attributes?.recommendation ?? ''}
+					description={attributes?.description ?? ''}
+				/>
+			{/if}
 		{:else}
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 			{@html line}
 		{/if}
 	{/each}
