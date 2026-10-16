@@ -8,11 +8,11 @@ import remarkRehype from 'remark-rehype';
 import remarkGFM from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
 import rehypeShiki from '@shikijs/rehype';
-import { createCssVariablesTheme } from 'shiki';
 import { rendererClassic, transformerTwoslash } from '@shikijs/twoslash';
 import rehypeStringify from 'rehype-stringify';
 import { isAuthenticated } from '#lib/auth.js';
 import { rehypeCodeBlock } from '#lib/rehype-code-block.js';
+import { shikiOptions } from '#lib/shiki-options.js';
 
 export const POST: RequestHandler = async (event) => {
 	const { request } = event;
@@ -85,27 +85,15 @@ class TwoSlashError extends Error {
 	recommendation: string = '';
 }
 
-const codeTheme = createCssVariablesTheme({
-	name: 'css-variables',
-	variablePrefix: '--shiki-',
-	variableDefaults: {},
-	fontStyle: true
-});
-
 const processor = unified()
 	.use(remarkParse)
 	.use(remarkGFM)
 	.use(remarkRehype, { allowDangerousHtml: true })
 	.use(rehypeSlug)
 	.use(rehypeShiki, {
-		theme: codeTheme,
+		...shikiOptions,
 		transformers: [
-			{
-				name: 'data-language',
-				pre(node) {
-					node.properties['data-language'] = this.options.lang;
-				}
-			},
+			...shikiOptions.transformers,
 			transformerTwoslash({
 				onTwoslashError: (error, code) => {
 					const err = new TwoSlashError();

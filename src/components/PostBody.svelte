@@ -22,8 +22,12 @@
 	async function onClick(event: MouseEvent) {
 		const button = (event.target as Element).closest<HTMLButtonElement>('[data-copy]');
 		if (!button) return;
-		const lines = button.closest('.codeblock')?.querySelectorAll('pre .line');
-		const text = Array.from(lines ?? [], (line) => line.textContent ?? '').join('\n');
+		const block = button.closest('.codeblock');
+		const lines = block?.querySelectorAll('pre .line');
+		// fall back to the whole code text if a block has no .line spans, never copy nothing silently
+		const text = lines?.length
+			? Array.from(lines, (line) => line.textContent ?? '').join('\n')
+			: (block?.querySelector('pre code')?.textContent ?? '');
 		try {
 			await navigator.clipboard.writeText(text);
 			button.textContent = 'COPIÉ';
