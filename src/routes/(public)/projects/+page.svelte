@@ -2,4 +2,12 @@
 	import Wip from '#components/WIP.svelte';
 </script>
 
-<Wip />
+<div class="page">
+	<Wip />
+</div>
+
+<style>
+	.page {
+		padding-top: 3rem;
+	}
+</style>

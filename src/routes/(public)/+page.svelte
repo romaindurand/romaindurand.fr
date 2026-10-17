@@ -1,17 +1,14 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { getSlug } from '#lib';
-	import { formatDate } from 'date-fns';
-	import { fr } from 'date-fns/locale';
+	import { formatPostDate } from '#lib/date.js';
 	import type { PageData } from './$types';
-	// import Filter from '$components/Filter.svelte';
 
 	interface Props {
 		data: PageData;
 	}
 
 	let { data }: Props = $props();
-
 	let posts = $derived(data.posts);
 </script>
 
@@ -19,66 +16,72 @@
 	<title>Romain Durand</title>
 </svelte:head>
 
-<!-- {#each filters as { name, active }, i (i)}
-	<Filter
-		{name}
-		{active}
-		on:click={() => {
-			filters[i].active = !filters[i].active;
-			localStorage.setItem('filters', JSON.stringify(filters));
-		}}
-	/>
-{/each} -->
+<h1 class="sr-only">Journal de Romain Durand</h1>
 
-{#each posts as post (post.id)}
-	<div class="post">
-		<a href={resolve('/(public)/post/[slug]', { slug: getSlug(post) })}>
-			<span class="title" style={`view-transition-name: post-title-${post.id};`}>{post.title}</span>
-			<div class="date" style={`view-transition-name: post-date-${post.id};`}>
-				Le {formatDate(post.createdAt, 'dd MMMM yyyy à HH:mm', {
-					locale: fr
-				})}
-			</div>
-			<p class="chapo" style={`view-transition-name: post-chapo-${post.id};`}>{post.chapo}</p>
+<section aria-label="Articles">
+	{#each posts as post (post.id)}
+		{@const { day, time } = formatPostDate(post.createdAt)}
+		<a class="entry" href={resolve('/(public)/post/[slug]', { slug: getSlug(post) })}>
+			<span class="meta" style={`view-transition-name: post-date-${post.id};`}
+				>{day}<br />{time}</span
+			>
+			<span class="body">
+				<span class="title" style={`view-transition-name: post-title-${post.id};`}
+					>{post.title}</span
+				>
+				<span class="chapo" style={`view-transition-name: post-chapo-${post.id};`}
+					>{post.chapo}</span
+				>
+			</span>
 		</a>
-	</div>
-{/each}
+	{/each}
+</section>
 
 <style>
-	.post {
-		margin: 2rem 0;
+	section {
+		padding-top: 2.5rem;
+		border-bottom: 2px solid var(--color-text);
 	}
-	.post a {
-		font-size: 1.1rem;
-		box-sizing: border-box;
-		padding: 1rem;
-		display: block;
+	.entry {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem 2.5rem;
+		padding: 2.25rem 0;
+		border-top: 2px solid var(--color-text);
+		color: var(--color-text);
 		text-decoration: none;
-		color: inherit;
-		border: 4px solid transparent;
-		transition: all 0.3s ease;
 	}
-	.post a:hover {
-		border: 4px solid red;
-	}
-	.post a:hover .title {
-		text-decoration: underline;
-	}
-
-	.post .title {
-		text-decoration: underline transparent;
-		transition: text-decoration 0.3s ease;
-		font-size: 1.6rem;
-		font-weight: bold;
-	}
-
-	.post .date {
-		margin: 0.5rem 0;
-		color: var(--color-grey-on-bg);
+	.meta {
+		flex: 0 0 150px;
 		font-family: var(--code-font);
+		font-size: 0.8125rem;
+		line-height: 1.6;
+		color: var(--color-grey-on-bg);
 	}
-	.post .chapo {
-		font-size: 1.2rem;
-		margin-top: 0.5rem;
+	.body {
+		flex: 1 1 380px;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	.title {
+		font-family: var(--code-font);
+		font-weight: 700;
+		font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+		line-height: 1.25;
+		text-wrap: balance;
+	}
+	.entry:hover .title,
+	.entry:focus-visible .title {
+		color: var(--color-red-on-bg);
+		text-decoration: underline;
+		text-decoration-thickness: 3px;
+		text-underline-offset: 6px;
+	}
+	.chapo {
+		font-size: 1.125rem;
+		line-height: 1.55;
+		color: var(--color-grey-on-bg);
 	}
 </style>

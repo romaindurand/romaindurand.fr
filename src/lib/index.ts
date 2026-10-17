@@ -1,6 +1,10 @@
 import type { Post } from '../../generated/prisma/client';
 
-export function getSlug(post: Post) {
+/**
+ * Builds the URL slug of a post: `<title>-<id>`, lowercased, accents stripped, non-alphanumerics replaced by `-`.
+ * Only `id` and `title` are needed, so neighbor posts loaded without `content` are accepted.
+ */
+export function getSlug(post: Pick<Post, 'id' | 'title'>) {
 	const slug = `${post.title}-${post.id}`
 		.replace(/\s+/g, '-')
 		.normalize('NFD')

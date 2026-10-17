@@ -1,46 +1,168 @@
 .PostBody {
-	font-size: 1.1rem;
-	line-height: 1.6;
+	font-size: 1.1875rem;
+	line-height: 1.65;
 	margin-bottom: 2rem;
+	display: flow-root;
+}
+
+.PostBody > * + * {
+	margin-top: 1.375rem;
+}
+
+.PostBody p {
+	max-width: 68ch;
 }
 
 .PostBody a {
-	color: var(--color-link);
+	color: var(--color-text);
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 4px;
+	overflow-wrap: anywhere;
 }
 
-.PostBody a:hover {
+.PostBody a:hover,
+.PostBody a:focus-visible {
 	color: var(--color-red-on-bg);
+	text-decoration-thickness: 4px;
+}
+
+.PostBody h2 {
+	margin-top: 2.25rem;
+	font-family: var(--code-font);
+	font-weight: 700;
+	font-size: clamp(1.5rem, 3vw, 2rem);
+	line-height: 1.2;
+}
+
+.PostBody h2::before {
+	content: '## ' / '';
+	color: var(--color-red-on-bg);
+}
+
+.PostBody .codeblock {
+	border: 2px solid var(--color-text);
+	background: var(--color-surface);
+	font-family: var(--code-font);
+}
+
+.PostBody .codebar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	border-bottom: 2px solid var(--color-text);
+	padding-left: 0.875rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: var(--color-grey-on-bg);
+}
+
+.PostBody .copybtn {
+	min-height: 44px;
+	padding: 0 1rem;
+	background: transparent;
+	color: var(--color-text);
+	border: 0;
+	border-left: 2px solid var(--color-text);
+	font-family: var(--code-font);
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	cursor: pointer;
+}
+
+.PostBody .copybtn:hover,
+.PostBody .copybtn:focus-visible {
+	background: var(--color-red-on-bg);
+	color: var(--color-on-accent);
 }
 
 .PostBody pre {
 	position: relative;
-	background-color: var(--color-code-background);
-	border: 1px solid var(--color-grey);
-	border-radius: 3px;
-	line-height: 1.2;
-	padding: 1rem;
-	word-wrap: normal;
-	overflow: auto;
+	margin: 0;
+	background: transparent !important;
+	border: 0;
+	border-radius: 0;
+	padding: 1rem 0;
+	overflow-x: auto;
 	overflow-y: hidden;
+	line-height: 1.8;
+	font-size: 0.9375rem;
 }
 
 .PostBody pre.twoslash {
-	padding: 1.5rem 1rem;
+	padding: 1.5rem 0 1rem;
 }
 
 .PostBody pre code {
+	display: grid;
+	width: max-content;
+	min-width: 100%;
+	counter-reset: line;
 	padding: 0;
 	border: none;
 	font-family: var(--code-font);
-	font-size: 1.2rem;
+	font-size: inherit;
+}
+
+.PostBody pre code .line {
+	padding-right: 1.25rem;
+}
+
+.PostBody pre code .line::before {
+	counter-increment: line;
+	content: counter(line);
+	display: inline-block;
+	box-sizing: content-box;
+	width: 2.5ch;
+	margin-right: 1rem;
+	padding-right: 0.75rem;
+	text-align: right;
+	color: var(--color-grey-on-bg);
+	border-right: 2px solid var(--color-text);
+	user-select: none;
+}
+
+/* Twoslash error box: the classic stylesheet pulls it 14px to the left with a
+   negative margin, which relied on horizontal padding on the pre. Align it
+   with the code column instead (past the line-number gutter, which is
+   2.5ch + 0.75rem + 1rem + 2px wide), with project colours. */
+.PostBody pre .error {
+	margin: 0.5rem 1.25rem 0.25rem calc(2.5ch + 1.75rem + 2px);
+	width: auto;
+	background: var(--color-background);
+	color: var(--color-text);
+	border-left: 2px solid var(--color-red-on-bg);
+}
+
+/* Twoslash appends an empty trailing .line: no number for it */
+.PostBody pre code .line:last-child:empty::before {
+	display: none;
+}
+
+/* CSS variables read by the Shiki "css-variables" theme tokens */
+.PostBody pre {
+	--shiki-foreground: var(--color-text);
+	--shiki-background: transparent;
+	--shiki-token-keyword: var(--color-code-kw);
+	--shiki-token-string: var(--color-text);
+	--shiki-token-string-expression: var(--color-text);
+	--shiki-token-constant: var(--color-text);
+	--shiki-token-function: var(--color-text);
+	--shiki-token-parameter: var(--color-text);
+	--shiki-token-comment: var(--color-grey-on-bg);
+	--shiki-token-punctuation: var(--color-grey-on-bg);
+	--shiki-token-link: var(--color-red-on-bg);
 }
 
 .PostBody p code {
-	font-family: monospace;
-	border: 1px solid #7f7f7f;
-	border-radius: 3px;
-	font-size: 1rem;
-	padding: 0.1rem 0.3rem;
+	font-family: var(--code-font);
+	font-size: 0.88em;
+	background: var(--color-surface);
+	border: 1px solid var(--color-grey-on-bg);
+	border-radius: 0;
+	padding: 1px 6px;
 	white-space: nowrap;
 }
 

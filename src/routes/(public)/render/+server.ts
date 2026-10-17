@@ -11,6 +11,8 @@ import rehypeShiki from '@shikijs/rehype';
 import { rendererClassic, transformerTwoslash } from '@shikijs/twoslash';
 import rehypeStringify from 'rehype-stringify';
 import { isAuthenticated } from '#lib/auth.js';
+import { rehypeCodeBlock } from '#lib/rehype-code-block.js';
+import { shikiOptions } from '#lib/shiki-options.js';
 
 export const POST: RequestHandler = async (event) => {
 	const { request } = event;
@@ -89,8 +91,9 @@ const processor = unified()
 	.use(remarkRehype, { allowDangerousHtml: true })
 	.use(rehypeSlug)
 	.use(rehypeShiki, {
-		theme: 'one-dark-pro',
+		...shikiOptions,
 		transformers: [
+			...shikiOptions.transformers,
 			transformerTwoslash({
 				onTwoslashError: (error, code) => {
 					const err = new TwoSlashError();
@@ -105,6 +108,7 @@ const processor = unified()
 			})
 		]
 	})
+	.use(rehypeCodeBlock)
 	.use(rehypeStringify, { allowDangerousHtml: true });
 
 const sha256 = (input: string) => {
