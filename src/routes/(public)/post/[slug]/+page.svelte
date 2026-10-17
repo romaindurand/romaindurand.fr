@@ -26,20 +26,22 @@
 			<p class="chapo" style={`view-transition-name: post-chapo-${post.id};`}>{post.chapo}</p>
 		</header>
 		<PostBody html={post.html} />
-		<nav class="pager" aria-label="Articles voisins">
-			{#if data.older}
-				<a href={resolve('/(public)/post/[slug]', { slug: getSlug(data.older) })}>
-					<span class="pmeta">← PLUS ANCIEN · {formatPostDate(data.older.createdAt).day}</span>
-					<span class="ptitle">{data.older.title}</span>
-				</a>
-			{/if}
-			{#if data.newer}
-				<a class="next" href={resolve('/(public)/post/[slug]', { slug: getSlug(data.newer) })}>
-					<span class="pmeta">PLUS RÉCENT · {formatPostDate(data.newer.createdAt).day} →</span>
-					<span class="ptitle">{data.newer.title}</span>
-				</a>
-			{/if}
-		</nav>
+		{#if data.older || data.newer}
+			<nav class="pager" aria-label="Articles voisins">
+				{#if data.older}
+					<a href={resolve('/(public)/post/[slug]', { slug: getSlug(data.older) })}>
+						<span class="pmeta">← PLUS ANCIEN · {formatPostDate(data.older.createdAt).day}</span>
+						<span class="ptitle">{data.older.title}</span>
+					</a>
+				{/if}
+				{#if data.newer}
+					<a class="next" href={resolve('/(public)/post/[slug]', { slug: getSlug(data.newer) })}>
+						<span class="pmeta">PLUS RÉCENT · {formatPostDate(data.newer.createdAt).day} →</span>
+						<span class="ptitle">{data.newer.title}</span>
+					</a>
+				{/if}
+			</nav>
+		{/if}
 	</div>
 </article>
 
