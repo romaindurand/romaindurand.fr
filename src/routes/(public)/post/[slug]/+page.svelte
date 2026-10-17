@@ -127,7 +127,10 @@
 		font-size: 1.125rem;
 		line-height: 1.3;
 	}
-	@media (min-width: 640px) {
+	/* The rail (150px) + gap (40px) + article basis (380px) + page padding need 660px
+	   once a classic 15px scrollbar is counted: below that the rail wraps above the prose
+	   and must not be sticky. */
+	@media (min-width: 660px) {
 		.rail {
 			position: sticky;
 			top: 1.5rem;
