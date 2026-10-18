@@ -23,10 +23,13 @@ export function parseTagInput(input: string): string[] {
 	];
 }
 
-/** Lit `tags` (liste séparée par des virgules ou paramètre répété) et `mode` dans l'URL. */
+/** Nombre maximal de tags pris en compte depuis l'URL (les suivants sont ignorés). */
+export const MAX_TAGS = 10;
+
+/** Lit `tags` (liste séparée par des virgules ou paramètre répété, `MAX_TAGS` au plus) et `mode` dans l'URL. */
 export function parseTagFilter(params: URLSearchParams): TagFilter {
 	return {
-		tags: parseTagInput(params.getAll('tags').join(',')),
+		tags: parseTagInput(params.getAll('tags').join(',')).slice(0, MAX_TAGS),
 		mode: params.get('mode') === 'any' ? 'any' : 'all'
 	};
 }
@@ -37,10 +40,10 @@ export function parseStatus(params: URLSearchParams): PostStatus {
 	return status === 'draft' || status === 'published' ? status : 'all';
 }
 
-/** Lit le paramètre `page` (entier ≥ 1, défaut 1). */
+/** Lit le paramètre `page` (entier de 1 à 9999, strict ; sinon 1). */
 export function parsePage(params: URLSearchParams): number {
-	const page = Number.parseInt(params.get('page') ?? '', 10);
-	return Number.isInteger(page) && page > 0 ? page : 1;
+	const page = params.get('page') ?? '';
+	return /^[1-9]\d{0,3}$/.test(page) ? Number(page) : 1;
 }
 
 /** Ajoute le tag s'il est absent, le retire sinon. */

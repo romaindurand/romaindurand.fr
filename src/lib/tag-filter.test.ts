@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+	MAX_TAGS,
 	buildTagWhere,
 	describeSelectionText,
 	parsePage,
@@ -34,6 +35,12 @@ describe('parseTagFilter', () => {
 			'La base'
 		]);
 	});
+	it('keeps only the first MAX_TAGS tags', () => {
+		const names = Array.from({ length: MAX_TAGS + 5 }, (_, index) => `t${index}`);
+		const filter = parseTagFilter(params(`tags=${names.join(',')}`));
+		expect(filter.tags).toEqual(names.slice(0, MAX_TAGS));
+		expect(MAX_TAGS).toBe(10);
+	});
 	it('falls back to all on an unknown mode', () => {
 		expect(parseTagFilter(params('tags=a,b&mode=nope')).mode).toBe('all');
 	});
@@ -50,6 +57,12 @@ describe('parseStatus / parsePage', () => {
 		expect(parsePage(params('page=0'))).toBe(1);
 		expect(parsePage(params('page=abc'))).toBe(1);
 		expect(parsePage(params(''))).toBe(1);
+	});
+	it('rejects trailing garbage, negatives, decimals and out of range pages', () => {
+		for (const value of ['3abc', '-2', '2.5', '99999999999999999999', '10000', '007']) {
+			expect(parsePage(params(`page=${value}`))).toBe(1);
+		}
+		expect(parsePage(params('page=9999'))).toBe(9999);
 	});
 });
 
