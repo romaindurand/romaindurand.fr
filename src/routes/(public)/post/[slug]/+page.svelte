@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import PostBody from '#components/PostBody.svelte';
+	import PostMedia from '#components/PostMedia.svelte';
 	import { getSlug } from '#lib';
 	import { formatPostDate } from '#lib/date.js';
 	import { getMetaDescription } from '#lib/seo.js';
@@ -25,6 +26,9 @@
 			<h1 style={`view-transition-name: post-title-${post.id};`}>{post.title}</h1>
 			<p class="chapo" style={`view-transition-name: post-chapo-${post.id};`}>{post.chapo}</p>
 		</header>
+		{#if post.media.some((entry) => entry.status === 'ok')}
+			<PostMedia media={post.media.filter((entry) => entry.status === 'ok')} title={post.title} />
+		{/if}
 		<PostBody html={post.html} />
 		{#if data.older || data.newer}
 			<nav class="pager" aria-label="Articles voisins">
