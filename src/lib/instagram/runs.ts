@@ -39,11 +39,17 @@ export class RunTracker implements Tracker {
 		private now: () => Date = () => new Date()
 	) {}
 
-	private async patch(data: Prisma.SyncRunUpdateInput) {
-		await prisma.syncRun.update({
-			where: { id: this.runId },
+	/** N'écrit que si le run est encore `running` (un run repris comme périmé n'est pas écrasé). */
+	private async patch(data: Prisma.SyncRunUpdateManyMutationInput) {
+		await prisma.syncRun.updateMany({
+			where: { id: this.runId, status: 'running' },
 			data: { ...data, heartbeatAt: this.now() }
 		});
+	}
+
+	/** Rafraîchit uniquement le heartbeat (longue opération silencieuse). */
+	async beat() {
+		await this.patch({});
 	}
 
 	async setTotal(total: number) {
@@ -65,21 +71,21 @@ export class RunTracker implements Tracker {
 	async shouldStop() {
 		const run = await prisma.syncRun.findUnique({
 			where: { id: this.runId },
-			select: { stopRequested: true }
+			select: { stopRequested: true, status: true }
 		});
-		return run?.stopRequested ?? false;
+		return !run || run.status !== 'running' || run.stopRequested;
 	}
 }
 
-/** Termine un job (libère le verrou). */
+/** Termine un job (libère le verrou) ; sans effet si le run n'est plus `running`. */
 export async function finishRun(
 	runId: number,
 	status: Exclude<RunStatus, 'running'>,
 	result: unknown,
 	now = new Date()
 ) {
-	await prisma.syncRun.update({
-		where: { id: runId },
+	await prisma.syncRun.updateMany({
+		where: { id: runId, status: 'running' },
 		data: { status, finishedAt: now, heartbeatAt: now, result: JSON.stringify(result) }
 	});
 }
@@ -135,18 +141,23 @@ const parse = <T>(json: string, fallback: T): T => {
 	}
 };
 
-/** Le dernier job (en cours ou terminé), ou `null`. */
+/**
+ * Le dernier job (en cours ou terminé), ou `null`. Un job `running` sans heartbeat depuis
+ * `LOCK_STALE_MS` est présenté comme `failed`.
+ */
 export async function getCurrentRun(now = new Date()): Promise<RunView | null> {
 	const run = await prisma.syncRun.findFirst({ orderBy: { id: 'desc' } });
 	if (!run) return null;
+	const dead =
+		run.status === 'running' && now.getTime() - run.heartbeatAt.getTime() >= LOCK_STALE_MS;
 	const eta =
-		run.status === 'running'
+		run.status === 'running' && !dead
 			? estimate(parse<[number, number][]>(run.samples, []), run.total, now.getTime())
 			: null;
 	return {
 		id: run.id,
 		kind: run.kind,
-		status: run.status,
+		status: dead ? 'failed' : run.status,
 		phase: run.phase,
 		total: run.total,
 		done: run.done,
@@ -154,7 +165,7 @@ export async function getCurrentRun(now = new Date()): Promise<RunView | null> {
 		startedAt: run.startedAt.toISOString(),
 		finishedAt: run.finishedAt?.toISOString() ?? null,
 		stopRequested: run.stopRequested,
-		result: parse<unknown>(run.result, {}),
+		result: dead ? { error: 'Interrompu (aucun signe de vie)' } : parse<unknown>(run.result, {}),
 		events: parse(run.events, []),
 		ratePerMin: eta?.ratePerMin ?? null,
 		remainingMs: eta?.remainingMs ?? null

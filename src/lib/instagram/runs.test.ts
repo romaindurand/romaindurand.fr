@@ -78,6 +78,42 @@ describe('RunTracker', () => {
 	it('requestStop is a no-op without a running job', async () => {
 		expect(await requestStop()).toBe(false);
 	});
+
+	it('beat only refreshes the heartbeat', async () => {
+		const run = (await acquireRun('sync-new'))!;
+		const tracker = new RunTracker(run.id, () => new Date(5_000_000));
+		await tracker.beat();
+		const row = await prisma.syncRun.findUniqueOrThrow({ where: { id: run.id } });
+		expect(row.heartbeatAt.getTime()).toBe(5_000_000);
+		expect(row).toMatchObject({ status: 'running', done: 0, total: 0, current: '' });
+	});
+});
+
+describe('run taken over as stale', () => {
+	async function staleRun() {
+		const t0 = new Date('2024-06-01T00:00:00Z');
+		const old = (await acquireRun('sync-new', t0))!;
+		await acquireRun('media', new Date(t0.getTime() + LOCK_STALE_MS + 1000));
+		return old;
+	}
+
+	it('is not rewritten by finishRun or the tracker', async () => {
+		const old = await staleRun();
+		const tracker = new RunTracker(old.id);
+		await tracker.setTotal(10);
+		await tracker.progress(3, 'x');
+		await tracker.event('e');
+		await tracker.beat();
+		await finishRun(old.id, 'done', { ok: true });
+		const row = await prisma.syncRun.findUniqueOrThrow({ where: { id: old.id } });
+		expect(row).toMatchObject({ status: 'failed', total: 0, done: 0, events: '[]' });
+		expect(JSON.parse(row.result)).toEqual({ error: 'Interrompu (verrou périmé)' });
+	});
+
+	it('tells its tracker to stop', async () => {
+		const old = await staleRun();
+		expect(await new RunTracker(old.id).shouldStop()).toBe(true);
+	});
 });
 
 describe('estimate', () => {
@@ -176,5 +212,22 @@ describe('getCurrentRun', () => {
 		const finished = await getCurrentRun();
 		expect(finished).toMatchObject({ status: 'done', result: { recovered: 6 }, remainingMs: null });
 		expect(typeof finished?.finishedAt).toBe('string');
+	});
+	it('presents a running job without heartbeat as failed, without estimate', async () => {
+		const t0 = new Date('2024-06-01T00:00:00Z');
+		const run = (await acquireRun('scan', t0))!;
+		const tracker = new RunTracker(run.id, () => t0);
+		await tracker.setTotal(10);
+		await tracker.progress(1, 'a');
+		const alive = await getCurrentRun(new Date(t0.getTime() + LOCK_STALE_MS - 1000));
+		expect(alive?.status).toBe('running');
+		const dead = await getCurrentRun(new Date(t0.getTime() + LOCK_STALE_MS + 1000));
+		expect(dead).toMatchObject({
+			id: run.id,
+			status: 'failed',
+			result: { error: 'Interrompu (aucun signe de vie)' },
+			ratePerMin: null,
+			remainingMs: null
+		});
 	});
 });
