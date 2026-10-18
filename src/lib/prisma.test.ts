@@ -154,6 +154,28 @@ describe('createPost / updatePost with tags', () => {
 		expect(updated?.tags.map((t) => t.name)).toEqual(['b', 'c']);
 	});
 
+	it('deduplicates tag names on create and update', async () => {
+		const created = await createPost({
+			title: 't',
+			chapo: '',
+			content: '',
+			published: false,
+			createdAt: new Date().toISOString(),
+			tags: ['a', 'a', 'b']
+		});
+		expect((await getPost(created.id))?.tags.map((t) => t.name)).toEqual(['a', 'b']);
+
+		await updatePost(created.id, {
+			title: 't',
+			chapo: '',
+			content: '',
+			published: false,
+			createdAt: new Date().toISOString(),
+			tags: ['b', 'b']
+		});
+		expect((await getPost(created.id))?.tags.map((t) => t.name)).toEqual(['b']);
+	});
+
 	it('leaves tags untouched when tags is omitted on update', async () => {
 		const created = await createPost({
 			title: 't',

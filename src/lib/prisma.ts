@@ -33,7 +33,7 @@ export function getAllPosts() {
 const tagsInclude = { select: { name: true }, orderBy: { name: 'asc' } } as const;
 
 const connectTags = (names: string[]) =>
-	names.map((name) => ({ where: { name }, create: { name } }));
+	[...new Set(names)].map((name) => ({ where: { name }, create: { name } }));
 
 /** Options communes de `listPosts` et `countPosts`. */
 export interface PostListOptions {
