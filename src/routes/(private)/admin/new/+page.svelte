@@ -1,5 +1,7 @@
 <script lang="ts">
 	import PostForm from '#components/PostForm.svelte';
+
+	let { data } = $props();
 </script>
 
-<PostForm />
+<PostForm allTags={data.allTags} />

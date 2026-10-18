@@ -5,4 +5,4 @@
 	let post = $derived(data.post);
 </script>
 
-<PostForm {post} />
+<PostForm {post} allTags={data.allTags} />

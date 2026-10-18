@@ -22,14 +22,6 @@ export function getPosts(limit = 100, offset = 0) {
 	});
 }
 
-export function getAllPosts() {
-	return prisma.post.findMany({
-		orderBy: {
-			id: 'desc'
-		}
-	});
-}
-
 const tagsInclude = { select: { name: true }, orderBy: { name: 'asc' } } as const;
 
 const connectTags = (names: string[]) =>

@@ -1,5 +1,6 @@
 import { type RequestEvent } from '@sveltejs/kit';
 import { checkAuth } from './auth';
+import { parseTagInput } from './tag-filter';
 
 export async function handlePostForm(event: RequestEvent) {
 	checkAuth(event);
@@ -11,5 +12,7 @@ export async function handlePostForm(event: RequestEvent) {
 	const craetedAtValue = data.get('createdAt')?.toString();
 	const createdAt = craetedAtValue ? new Date(craetedAtValue).toISOString() : '';
 
-	return { title, chapo, content, published, createdAt };
+	const tags = parseTagInput(data.get('tags')?.toString() ?? '');
+
+	return { title, chapo, content, published, createdAt, tags };
 }

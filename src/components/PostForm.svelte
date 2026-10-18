@@ -2,17 +2,32 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import type * as Monaco from 'monaco-editor';
-	import type { Post } from '../../generated/prisma/client';
+	import type { Post, PostMedia } from '../../generated/prisma/client';
+	import { parseTagInput } from '#lib/tag-filter.js';
+	import MediaStatus from './MediaStatus.svelte';
 	import { addCodeBlock, addCutComment } from '#lib/monaco.js';
 	import PostBody from './PostBody.svelte';
 	import LinkButton from './LinkButton.svelte';
 	import { format } from 'date-fns';
 
+	type PostWithRelations = Post & { tags: { name: string }[]; media: PostMedia[] };
+
 	interface Props {
-		post?: Post | null;
+		post?: PostWithRelations | null;
+		allTags?: string[];
 	}
 
-	let { post = null }: Props = $props();
+	let { post = null, allTags = [] }: Props = $props();
+	let tagsValue = $state(initialTags());
+
+	function initialTags() {
+		return post ? post.tags.map((tag) => tag.name).join(', ') : '';
+	}
+
+	function addTag(name: string) {
+		const current = parseTagInput(tagsValue);
+		if (!current.includes(name)) tagsValue = [...current, name].join(', ');
+	}
 
 	let editor: Monaco.editor.IStandaloneCodeEditor | undefined = $state();
 	let editorContainer: HTMLElement | undefined = $state();
@@ -92,6 +107,21 @@
 		<div>
 			<input type="text" name="chapo" placeholder="Chapo" value={post ? post.chapo : ''} />
 		</div>
+		<div>
+			<input
+				type="text"
+				name="tags"
+				placeholder="Tags (séparés par des virgules)"
+				bind:value={tagsValue}
+			/>
+			{#if allTags.length}
+				<div class="suggestions">
+					{#each allTags as name (name)}
+						<button type="button" onclick={() => addTag(name)}>+ {name}</button>
+					{/each}
+				</div>
+			{/if}
+		</div>
 		<details>
 			<summary>Options</summary>
 			<div>
@@ -110,6 +140,21 @@
 				</label>
 			</div>
 		</details>
+		{#if post && post.media.length}
+			<details open={post.media.some((entry) => entry.status !== 'ok')}>
+				<summary>Médias ({post.media.length})</summary>
+				<ul>
+					{#each post.media as entry (entry.id)}
+						<li>
+							{entry.kind} · {entry.path} · {entry.status}{entry.unavailableReason
+								? ` (${entry.unavailableReason})`
+								: ''}
+						</li>
+					{/each}
+				</ul>
+				<MediaStatus postId={post.id} media={post.media} />
+			</details>
+		{/if}
 		<div>
 			<div class="tabs">
 				<button
@@ -259,6 +304,19 @@
 		cursor: pointer;
 	}
 
+	.suggestions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 0.5rem;
+	}
+	.suggestions button {
+		min-height: 44px;
+		padding: 0 0.75rem;
+		border: 1px solid #ccc;
+		background: #fff;
+		cursor: pointer;
+	}
 	details {
 		border: 1px solid #ccc;
 		padding: 0.5rem 1rem;
