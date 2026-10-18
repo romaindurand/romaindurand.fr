@@ -56,7 +56,7 @@ export class PrismaRegistry implements Registry {
 export class PrismaIngestor implements Ingestor {
 	constructor(
 		private mediaDir: string,
-		private fetchFn: typeof fetch = fetchWithTimeout(120_000)
+		private fetchFn: typeof fetch = fetchWithTimeout(300_000)
 	) {}
 
 	async ingest(item: IgItem, tags: string[]) {
