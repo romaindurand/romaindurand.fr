@@ -8,6 +8,7 @@
 	import { Youtube } from 'svelte-youtube-lite';
 	import { targetBlankLinks } from '#lib';
 	import TwoslashError from './TwoslashError.svelte';
+	import Instagram from './Instagram.svelte';
 
 	interface Props {
 		html?: string;
@@ -16,7 +17,7 @@
 	let { html = '' }: Props = $props();
 
 	let splitHtml: string[] = $state([]);
-	const components = { Youtube, TwoslashError };
+	const components = { Youtube, TwoslashError, Instagram };
 	const componentNames = Object.keys(components);
 
 	async function onClick(event: MouseEvent) {
@@ -56,6 +57,8 @@
 					recommendation={attributes?.recommendation ?? ''}
 					description={attributes?.description ?? ''}
 				/>
+			{:else if name === 'Instagram'}
+				<Instagram code={attributes?.code ?? ''} />
 			{/if}
 		{:else}
 			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
