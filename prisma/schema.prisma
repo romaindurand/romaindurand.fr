@@ -19,6 +19,90 @@ model Post {
   content   String   @default("")
   published Boolean  @default(false)
   slug      String?  @unique
+  tags      Tag[]
+  media     PostMedia[]
+  instagram InstagramItem?
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
+}
+
+model PostMedia {
+  id                Int     @id @default(autoincrement())
+  postId            Int
+  post              Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  position          Int
+  sourceIndex       Int     @default(0)
+  kind              String // image | video
+  path              String
+  posterPath        String?
+  width             Int
+  height            Int
+  status            String  @default("ok") // ok | missing | unavailable
+  unavailableReason String?
+
+  @@index([postId])
+  @@index([status])
+}
+
+model InstagramItem {
+  pk          String                @id
+  code        String
+  url         String
+  author      String
+  caption     String                @default("")
+  type        String // image | video | carousel
+  takenAt     DateTime
+  firstSeenAt DateTime              @default(now())
+  postId      Int?                  @unique
+  post        Post?                 @relation(fields: [postId], references: [id], onDelete: SetNull)
+  sources     InstagramItemSource[]
+}
+
+model InstagramItemSource {
+  itemPk String
+  source String
+  item   InstagramItem @relation(fields: [itemPk], references: [pk], onDelete: Cascade)
+
+  @@id([itemPk, source])
+  @@index([source])
+}
+
+model InstagramSource {
+  key          String    @id
+  oldestCursor String?
+  hasMoreOlder Boolean   @default(true)
+  lastRunAt    DateTime?
+}
+
+model InstagramSession {
+  id           Int       @id @default(1)
+  cookies      String?
+  status       String    @default("missing") // ok | expired | missing
+  updatedAt    DateTime  @updatedAt
+  tokenHash    String?
+  blockedUntil DateTime?
+  settings     String    @default("{}")
+}
+
+model SyncRun {
+  id            Int       @id @default(autoincrement())
+  kind          String // sync-new | sync-older | scan | media
+  status        String    @default("running") // running | done | stopped | failed
+  phase         String    @default("")
+  total         Int       @default(0)
+  done          Int       @default(0)
+  current       String    @default("")
+  startedAt     DateTime  @default(now())
+  heartbeatAt   DateTime  @default(now())
+  finishedAt    DateTime?
+  stopRequested Boolean   @default(false)
+  result        String    @default("{}")
+  events        String    @default("[]")
+  samples       String    @default("[]")
 }
 
 model FailedLogin {
