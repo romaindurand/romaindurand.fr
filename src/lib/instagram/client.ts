@@ -1,4 +1,5 @@
 import { instagramPostUrl, isInstagramCode } from '../instagram-embed';
+import { fetchWithTimeout } from './http';
 import type { IgSettings } from './session';
 import {
 	InstagramHttpError,
@@ -19,6 +20,7 @@ type Raw = any;
 
 const ORIGIN = 'https://www.instagram.com';
 const APP_ID = '936619743392459';
+const RATE_LIMIT_MESSAGE = /please wait|try again later|trop de requêtes/i;
 const USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0';
 
 function mapNode(node: Raw, index: number): IgMedia | null {
@@ -78,7 +80,7 @@ export class HttpInstagramClient implements InstagramClient {
 		private cookies: IgCookies,
 		private options: ClientOptions
 	) {
-		this.fetchFn = options.fetchFn ?? fetch;
+		this.fetchFn = options.fetchFn ?? fetchWithTimeout();
 	}
 
 	private headers() {
@@ -118,11 +120,17 @@ export class HttpInstagramClient implements InstagramClient {
 			response.status === 401 ||
 			body?.message === 'login_required' ||
 			body?.require_login ||
-			body?.message === 'checkpoint_required'
+			body?.message === 'checkpoint_required' ||
+			body?.message === 'challenge_required'
 		) {
 			throw new SessionExpiredError(body?.message ?? 'Session expirée');
 		}
-		if (body?.message === 'feedback_required') throw new RateLimitedError('feedback_required');
+		if (
+			body?.message === 'feedback_required' ||
+			(typeof body?.message === 'string' && RATE_LIMIT_MESSAGE.test(body.message))
+		) {
+			throw new RateLimitedError(body.message);
+		}
 		if (response.status === 404) return null;
 		if (!response.ok) throw new InstagramHttpError(response.status, body?.message);
 		return body;
@@ -167,6 +175,8 @@ export class HttpInstagramClient implements InstagramClient {
 			throw new Error(`Source inconnue : ${source}`);
 		}
 		const body = await this.request(path, params);
+		// Un 404 n'est pas la fin du flux : la synchro le prendrait pour une fin normale.
+		if (body === null) throw new InstagramHttpError(404, 'Flux introuvable');
 		return {
 			items: mapItems((body?.items ?? []).map(unwrap)),
 			nextCursor: body?.more_available ? (body.next_max_id ?? null) : null

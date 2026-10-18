@@ -200,6 +200,30 @@ describe('error mapping', () => {
 			failing({ status: 400, body: { message: 'feedback_required' } }).fetchPage('liked', null)
 		).rejects.toBeInstanceOf(RateLimitedError);
 	});
+	it('flags a challenge as an expired session', async () => {
+		await expect(
+			failing({ status: 400, body: { message: 'challenge_required' } }).fetchPage('liked', null)
+		).rejects.toBeInstanceOf(SessionExpiredError);
+	});
+	it('flags wait-and-retry messages as rate limiting', async () => {
+		for (const message of [
+			'Please wait a few minutes before you try again.',
+			'Try again later',
+			'Trop de requêtes'
+		]) {
+			await expect(
+				failing({ status: 400, body: { message } }).fetchPage('liked', null)
+			).rejects.toBeInstanceOf(RateLimitedError);
+		}
+	});
+	it('does not mistake a missing feed for the end of the feed', async () => {
+		const { client: c } = client({});
+		await expect(c.fetchPage('liked', null)).rejects.toMatchObject({
+			name: 'InstagramHttpError',
+			status: 404,
+			message: 'Flux introuvable'
+		});
+	});
 	it('does not flag the session on a server error page or invalid JSON', async () => {
 		await expect(
 			failing({ status: 503, body: '<html>down</html>', type: 'text/html' }).fetchPage(
