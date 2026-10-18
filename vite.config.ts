@@ -4,6 +4,7 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
+import { testDbUrl } from './src/test/test-db';
 
 export default defineConfig({
 	plugins: [
@@ -21,5 +22,10 @@ export default defineConfig({
 		})
 	],
 	ssr: { external: ['typescript'] },
-	test: { include: ['src/**/*.{test,spec}.{js,ts}'] }
+	test: {
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+		env: { DATABASE_URL: testDbUrl },
+		globalSetup: ['./src/test/global-setup.ts'],
+		fileParallelism: false
+	}
 });
