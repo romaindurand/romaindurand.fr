@@ -8,6 +8,14 @@ export function escapeHtml(text: string) {
 	return text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
+/**
+ * Échappe par antislash les caractères spéciaux du markdown : une légende est du texte brut,
+ * jamais de la syntaxe (sinon `[x](javascript:…)` deviendrait un lien cliquable).
+ */
+export function escapeMarkdown(text: string) {
+	return text.replace(/[\\`*_[\]()!#>~|]/g, '\\$&');
+}
+
 function truncate(text: string, max: number) {
 	const chars = [...text];
 	return chars.length <= max
@@ -30,7 +38,7 @@ export function buildDraft(item: Pick<IgItem, 'author' | 'caption' | 'url' | 'co
 			.split('\n')
 			.find((line) => line.trim())
 			?.trim() ?? '';
-	const body = escapeHtml(caption).split('\n').join('  \n');
+	const body = escapeMarkdown(escapeHtml(caption)).split('\n').join('  \n');
 	const embed = item.type === 'video' ? null : instagramTag(item.code);
 	const link = `[Voir sur Instagram](${item.url})`;
 	return {
