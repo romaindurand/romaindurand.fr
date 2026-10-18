@@ -86,8 +86,10 @@ class FakeRegistry implements Registry {
 
 class FakeIngestor implements Ingestor {
 	ingested: Array<{ pk: string; tags: string[] }> = [];
+	failFor = new Set<string>();
 	constructor(private registry: FakeRegistry) {}
 	async ingest(item: IgItem, tags: string[]) {
+		if (this.failFor.has(item.pk)) throw new Error(`échec ${item.pk}`);
 		this.registry.items.add(item.pk);
 		this.ingested.push({ pk: item.pk, tags });
 	}
@@ -314,6 +316,25 @@ describe('failures and controls', () => {
 		const result = await runSync(config(), deps);
 		expect(result.outcome).toBe('stopped');
 		expect(ingestor.ingested).toEqual([]);
+	});
+
+	it('isolates an ingest failure: the next items are processed and the failed one is retried later', async () => {
+		const { registry, ingestor, tracker, deps } = setup({
+			liked: { tags: ['like'], pages: [[item('bad'), item('a'), item('b')]] }
+		});
+		ingestor.failFor.add('bad');
+
+		const first = await runSync(config(), deps);
+		expect(first).toMatchObject({ outcome: 'completed', created: 2, failed: 1 });
+		expect(ingestor.ingested.map((i) => i.pk)).toEqual(['a', 'b']);
+		expect(registry.itemSources.has('bad|liked')).toBe(false);
+		expect(tracker.events.some((e) => e.startsWith('Échec : @u (liked)'))).toBe(true);
+
+		ingestor.failFor.clear();
+		const second = await runSync(config(), deps);
+		expect(second).toMatchObject({ outcome: 'completed', created: 1, failed: 0 });
+		expect(ingestor.ingested.map((i) => i.pk)).toEqual(['a', 'b', 'bad']);
+		expect(registry.itemSources.has('bad|liked')).toBe(true);
 	});
 
 	it('rethrows unexpected errors', async () => {

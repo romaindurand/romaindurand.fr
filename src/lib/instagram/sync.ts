@@ -68,6 +68,8 @@ export interface SyncResult {
 	created: number;
 	tagged: number;
 	skipped: number;
+	/** Éléments dont l'ingestion a échoué (retentés à une exécution ultérieure). */
+	failed: number;
 	requests: number;
 	warnings: string[];
 	blockedUntil?: Date;
@@ -93,6 +95,7 @@ export async function runSync(config: SyncConfig, deps: SyncDeps): Promise<SyncR
 		created: 0,
 		tagged: 0,
 		skipped: 0,
+		failed: 0,
 		requests: 0,
 		warnings: []
 	};
@@ -141,7 +144,15 @@ export async function runSync(config: SyncConfig, deps: SyncDeps): Promise<SyncR
 					return 'ok';
 				}
 				if (await tracker.shouldStop()) return 'stopped';
-				await ingestor.ingest(item, tags);
+				try {
+					await ingestor.ingest(item, tags);
+				} catch (error) {
+					// Élément isolé : ni appartenance à la source ni compte, il sera retenté plus tard.
+					result.failed++;
+					const message = error instanceof Error ? error.message : String(error);
+					await tracker.event(`Échec : @${item.author} (${key}) : ${message}`);
+					continue;
+				}
 				result.created++;
 				await tracker.progress(result.created, `@${item.author}`);
 				await tracker.event(`Nouveau : @${item.author} (${key})`);
