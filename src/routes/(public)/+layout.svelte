@@ -214,8 +214,18 @@
 		.cursor {
 			animation: blink 1.1s steps(1) infinite;
 		}
-		.indicator {
-			transition: transform 0.38s cubic-bezier(0.65, 0, 0.25, 1);
+	}
+	/*
+	 * Fallback only: where view transitions exist, the nav-indicator group does the sliding.
+	 * A CSS transition running at the same time makes the browser capture the new state with the
+	 * bar still at its old position (transition just started): the group then has nothing to
+	 * animate and the bar sits still, then jumps once the transition ends (seen in Firefox).
+	 */
+	@supports not (view-transition-name: none) {
+		@media (prefers-reduced-motion: no-preference) {
+			.indicator {
+				transition: transform 0.38s cubic-bezier(0.65, 0, 0.25, 1);
+			}
 		}
 	}
 	@keyframes blink {
